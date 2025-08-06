@@ -12,40 +12,97 @@
         /* Styles de base pour le corps de la page avec la police Merriweather */
         body {
             font-family: 'Merriweather', serif;
-            background-color: #f3f4f6; /* Couleur de fond gris clair (sera remplacée par le dégradé Tailwind) */
+            background-color: #f3f4f6;
         }
-        /* Styles personnalisés pour la barre de défilement afin d'améliorer l'esthétique */
+        /* Styles personnalisés pour la barre de défilement */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #e0e0e0; /* Fond de la piste de défilement */
-            border-radius: 10px; /* Bords arrondis pour la piste */
+            background: #e0e0e0;
+            border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #a0a0a0; /* Couleur du pouce de défilement */
-            border-radius: 10px; /* Bords arrondis pour le pouce */
+            background: #a0a0a0;
+            border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #808080; /* Couleur du pouce au survol */
+            background: #808080;
         }
         /* Appliquer la police Inter aux boutons spécifiquement pour une meilleure lisibilité UI */
         button {
             font-family: 'Inter', sans-serif;
         }
+        .neuvaine-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            max-width: 900px;
+            margin: 2rem auto;
+            position: relative;
+        }
+        .image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #fcd34d;
+        }
+        .image-container img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+        #bougie {
+            cursor: pointer;
+            width: 100px;
+            height: auto;
+            transition: filter 0.3s ease-in-out;
+        }
+        .bougie-lit {
+            filter: drop-shadow(0 0 10px gold);
+        }
+        .demande-container textarea {
+            min-height: 120px;
+        }
+        .prieur-block {
+            background-color: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .prieur-block h2 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+        .bouton-principal {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .bouton-principal:hover {
+            background-color: #2563eb;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center min-h-screen p-4 bg-gradient-to-br from-blue-100 to-indigo-200">
-    <!-- Section Plan de Lecture Biblique (sa propre carte) -->
+    <!-- Section Plan de Lecture Biblique -->
     <div id="bible-plan-section" class="bg-white rounded-xl shadow-xl p-6 sm:p-8 md:p-10 max-w-2xl w-full flex flex-col items-center mb-6">
-        <!-- Titre principal de l'application - déplacé à l'intérieur de la carte -->
         <h1 class="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6 text-center">Mon Plan de Lecture Biblique</h1>
-
         <div class="w-full text-center">
-            <p class="text-lg sm:text-xl text-blue-700 mb-4" id="current-day-text">Jour X</p>
+            <p class="text-lg sm:text-xl text-blue-700 mb-4" id="current-day-text">Chargement...</p>
             <p class="text-xl italic text-blue-900 mb-6" id="current-reading-text">Chargement...</p>
         </div>
-
         <!-- Boutons de navigation pour le plan biblique -->
         <div class="flex flex-col sm:flex-row gap-4 w-full justify-center mb-6">
             <button id="prev-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 flex items-center justify-center">
@@ -55,14 +112,12 @@
                 Jour Suivant <span id="next-date" class="ml-2 text-sm opacity-80"></span>
             </button>
         </div>
-
         <!-- Bouton pour ouvrir la lecture externe -->
         <button id="open-reading-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 w-full sm:w-auto mb-6">
             Lire le Texte sur BibleGateway
         </button>
     </div>
-
-    <!-- Section pour le texte biblique (expliquant la limitation CORS) - Toujours en bas du plan de lecture -->
+    <!-- Section pour le texte biblique (expliquant la limitation CORS) -->
     <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-center text-blue-700 w-full max-w-2xl mb-6">
         <p class="text-xs">
             Pour des raisons de sécurité du navigateur (CORS), le texte biblique ne peut pas être affiché directement ici.
@@ -70,33 +125,63 @@
         </p>
     </div>
 
-    <!-- Nouvelle Section Neuvaines (son propre carré, totalement séparé) -->
-    <div id="novenas-standalone-section" class="bg-white rounded-xl shadow-xl p-6 sm:p-8 md:p-10 max-w-2xl w-full flex flex-col items-center mb-6">
-        <h2 class="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6 text-center">Mes Neuvaines</h2>
-
-        <!-- Sélecteur de Neuvaine -->
-        <div class="mb-4 w-full flex flex-col sm:flex-row items-center justify-center gap-2">
-            <label for="novena-select" class="text-lg text-gray-700 font-semibold">Choisir une Neuvaine:</label>
-            <select id="novena-select" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
-                <!-- Options seront remplies par JavaScript -->
-            </select>
+    <!-- Section Neuvaines -->
+    <div id="novenas-standalone-section" class="neuvaine-card mb-6">
+        <header class="text-center mb-8">
+            <h2 id="novena-main-title" class="text-3xl sm:text-4xl font-extrabold text-gray-900">Mes Neuvaines</h2>
+        </header>
+        <!-- Conteneur pour la photo et la bougie -->
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
+            <div class="image-container">
+                <input type="file" id="photoUpload" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+                <img id="neuvaine-photo" src="https://placehold.co/150x150/e5e7eb/4b5563?text=Ajouter+une+photo" alt="Votre photo de neuvaine" class="w-full h-full object-cover">
+            </div>
+            <div class="image-container flex items-center justify-center border-none">
+                <img id="bougie" src="https://storage.googleapis.com/gweb-uniblog-publish-prod/images/candle-unlit.png" alt="Une bougie" class="bougie-unlit">
+            </div>
+        </div>
+        
+        <!-- Sélecteur de Neuvaine et Date de Début -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-6 w-full justify-center">
+            <div class="w-full sm:w-auto">
+                <label for="novena-select" class="block text-lg text-gray-700 font-semibold mb-1">Choisir une Neuvaine:</label>
+                <select id="novena-select" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 w-full"></select>
+            </div>
+            <div class="w-full sm:w-auto">
+                <label for="novena-start-date" class="block text-lg text-gray-700 font-semibold mb-1">Date de Début:</label>
+                <input type="date" id="novena-start-date" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 w-full" disabled>
+            </div>
         </div>
 
-        <!-- Sélecteur de Date de Début -->
-        <div class="mb-6 w-full flex flex-col sm:flex-row items-center justify-center gap-2">
-            <label for="novena-start-date" class="text-lg text-gray-700 font-semibold">Date de Début:</label>
-            <input type="date" id="novena-start-date" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400" disabled>
+        <!-- Section de la demande du jour -->
+        <div class="demande-container bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg mb-8">
+            <label for="demandeDuJour" class="block text-lg font-medium text-blue-800 mb-2">Formulez votre demande du jour :</label>
+            <textarea id="demandeDuJour" placeholder="Votre demande..." class="w-full p-3 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"></textarea>
+            <button id="saveDemande" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">Sauvegarder ma demande</button>
         </div>
 
-        <p class="text-lg italic text-blue-900 mb-6 text-center" id="novenas-content-placeholder">
-            Aucune neuvaine sélectionnée. Veuillez utiliser les boutons ci-dessous pour choisir une neuvaine et un jour.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+        <!-- Prières initiales (Confiteor et Saint-Michel) -->
+        <div class="prieres-container" id="initial-prayers">
+            <div class="prieur-block">
+                <h2>Confiteor</h2>
+                <p>Je confesse à Dieu tout-puissant, je reconnais devant mes frères, que j’ai péché en pensée, en parole, par action et par omission; oui, j’ai vraiment péché. C’est pourquoi je supplie la Vierge Marie, les anges et tous les saints, et vous aussi, mes frères, de prier pour moi le Seigneur notre Dieu. Que Dieu tout-puissant nous fasse miséricorde; qu’il nous pardonne nos péchés et nous conduise à la vie éternelle. Amen.</p>
+            </div>
+            <div class="prieur-block">
+                <h2>Prière à saint Michel</h2>
+                <p>“Saint Michel Archange, rempli de la sagesse de Dieu, fort dans le combat, viens à mon aide, soutiens-moi dans les difficultés, les épreuves, quand je souffre, quand je doute, quand je pleure. Obtiens-moi le courage, la force, la volonté, pour ne pas me laisser abattre. Saint Michel Archange, sois mon défenseur et protecteur contre les forces du Mal. Me confiant en l’intercession de votre Bienheureux Archange Saint Michel, je vous supplie, Seigneur Père, Fils et Saint-Esprit, de m’accorder la grâce… <span class="demande-placeholder">(formuler votre demande)</span>”</p>
+            </div>
+        </div>
+        
+        <!-- Conteneur pour la prière quotidienne -->
+        <div class="prieur-block">
+            <h2 id="daily-prayer-title">Prière Quotidienne</h2>
+            <p id="daily-prayer-text">Veuillez sélectionner une neuvaine et une date pour voir la prière ici.</p>
+        </div>
+
+        <!-- Boutons de navigation pour les neuvaines -->
+        <div class="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
             <button id="prev-novena-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" disabled>
                 Jour Précédent
-            </button>
-            <button id="choose-day-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75" disabled>
-                Choisir le Jour
             </button>
             <button id="next-novena-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" disabled>
                 Jour Suivant
@@ -110,32 +195,11 @@
     </div>
 
     <script>
-        // Tableau pour stocker le plan de lecture analysé
-        let readingPlan = [];
-        // Index du jour actuel dans le tableau (0-indexé)
-        let currentDayIndex = 0;
+        // Le code JavaScript complet a été fusionné ici
 
-        // Références aux éléments du DOM pour le plan biblique
-        const biblePlanSection = document.getElementById('bible-plan-section');
-        const currentDayText = document.getElementById('current-day-text');
-        const currentReadingText = document.getElementById('current-reading-text');
-        const prevDayBtn = document.getElementById('prev-day-btn');
-        const nextDayBtn = document.getElementById('next-day-btn');
-        const openReadingBtn = document.getElementById('open-reading-btn');
-        const messageBox = document.getElementById('message-box');
-        const prevDateSpan = document.getElementById('prev-date');
-        const nextDateSpan = document.getElementById('next-date');
-
-        // Références aux éléments du DOM pour la nouvelle section Neuvaines
-        const novenasStandaloneSection = document.getElementById('novenas-standalone-section');
-        const novenasContentPlaceholder = document.getElementById('novenas-content-placeholder');
-        const chooseNovenaBtn = document.getElementById('choose-novena-btn'); // This button is now mostly for visual grouping, logic is on select/date/day
-        const chooseDayBtn = document.getElementById('choose-day-btn');
-        const novenaSelect = document.getElementById('novena-select');
-        const novenaStartDateInput = document.getElementById('novena-start-date');
-        const prevNovenaDayBtn = document.getElementById('prev-novena-day-btn');
-        const nextNovenaDayBtn = document.getElementById('next-novena-day-btn');
-        const novenaTitle = document.querySelector('#novenas-standalone-section h2'); // Get the h2 inside the novenas section
+        // ====================================================================================
+        // DONNÉES ET ÉLÉMENTS DU DOM
+        // ====================================================================================
 
         // Données des neuvaines
         const novenasDefinitions = [
@@ -185,11 +249,415 @@
                 ]
             }
         ];
+        // Données du plan de lecture biblique (texte brut)
+        const rawBibleReadingPlan = `
+        Jour 1 - Genèse 1, 2, 3
+        Jour 2 - Genèse 4, 5, 6
+        Jour 3 - Genèse 7, 8, 9
+        Jour 4 - Genèse 10, 11, 12
+        Jour 5 - Genèse 13, 14, 15
+        Jour 6 - Genèse 16, 17, 18
+        Jour 7 - Genèse 19, 20, 21
+        Jour 8 - Genèse 22, 23, 24
+        Jour 9 - Genèse 25, 26, 27
+        Jour 10 - Genèse 28, 29, 30
+        Jour 11 - Genèse 31, 32, 33
+        Jour 12 - Genèse 34, 35, 36
+        Jour 13 - Genèse 37, 38, 39
+        Jour 14 - Genèse 40, 41, 42
+        Jour 15 - Genèse 43, 44, 45
+        Jour 16 - Genèse 46, 47, 48
+        Jour 17 - Genèse 49, 50 ; Exode 1
+        Jour 18 - Exode 2, 3, 4
+        Jour 19 - Exode 5, 6, 7
+        Jour 20 - Exode 8, 9, 10
+        Jour 21 - Exode 11, 12, 13
+        Jour 22 - Exode 14, 15, 16
+        Jour 23 - Exode 17, 18, 19
+        Jour 24 - Exode 20, 21, 22
+        Jour 25 - Exode 23, 24, 25
+        Jour 26 - Exode 26, 27, 28
+        Jour 27 - Exode 29, 30, 31
+        Jour 28 - Exode 32, 33, 34
+        Jour 29 - Exode 35, 36, 37
+        Jour 30 - Exode 38, 39, 40
+        Jour 31 - Lévitique 1, 2, 3
+        Jour 32 - Lévitique 4, 5, 6
+        Jour 33 - Lévitique 7, 8, 9
+        Jour 34 - Lévitique 10, 11, 12
+        Jour 35 - Lévitique 13, 14, 15
+        Jour 36 - Lévitique 16, 17, 18
+        Jour 37 - Lévitique 19, 20, 21
+        Jour 38 - Lévitique 22, 23, 24
+        Jour 39 - Lévitique 25, 26, 27
+        Jour 40 - Nombres 1, 2, 3
+        Jour 41 - Nombres 4, 5, 6
+        Jour 42 - Nombres 7, 8, 9
+        Jour 43 - Nombres 10, 11, 12
+        Jour 44 - Nombres 13, 14, 15
+        Jour 45 - Nombres 16, 17, 18
+        Jour 46 - Nombres 19, 20, 21
+        Jour 47 - Nombres 22, 23, 24
+        Jour 48 - Nombres 25, 26, 27
+        Jour 49 - Nombres 28, 29, 30
+        Jour 50 - Nombres 31, 32, 33
+        Jour 51 - Nombres 34, 35, 36
+        Jour 52 - Deutéronome 1, 2, 3
+        Jour 53 - Deutéronome 4, 5, 6
+        Jour 54 - Deutéronome 7, 8, 9
+        Jour 55 - Deutéronome 10, 11, 12
+        Jour 56 - Deutéronome 13, 14, 15
+        Jour 57 - Deutéronome 16, 17, 18
+        Jour 58 - Deutéronome 19, 20, 21
+        Jour 59 - Deutéronome 22, 23, 24
+        Jour 60 - Deutéronome 25, 26, 27
+        Jour 61 - Deutéronome 28, 29, 30
+        Jour 62 - Deutéronome 31, 32, 33
+        Jour 63 - Deutéronome 34 ; Josué 1, 2
+        Jour 64 - Josué 3, 4, 5
+        Jour 65 - Josué 6, 7, 8
+        Jour 66 - Josué 9, 10, 11
+        Jour 67 - Josué 12, 13, 14
+        Jour 68 - Josué 15, 16, 17
+        Jour 69 - Josué 18, 19, 20
+        Jour 70 - Josué 21, 22, 23
+        Jour 71 - Josué 24 ; Juges 1, 2
+        Jour 72 - Juges 3, 4, 5
+        Jour 73 - Juges 6, 7, 8
+        Jour 74 - Juges 9, 10, 11
+        Jour 75 - Juges 12, 13, 14
+        Jour 76 - Juges 15, 16, 17
+        Jour 77 - Juges 18, 19, 20
+        Jour 78 - Juges 21 ; Ruth 1, 2
+        Jour 79 - Ruth 3, 4 ; 1 Samuel 1
+        Jour 80 - 1 Samuel 2, 3, 4
+        Jour 81 - 1 Samuel 5, 6, 7
+        Jour 82 - 1 Samuel 8, 9, 10
+        Jour 83 - 1 Samuel 11, 12, 13
+        Jour 84 - 1 Samuel 14, 15, 16
+        Jour 85 - 1 Samuel 17, 18, 19
+        Jour 86 - 1 Samuel 20, 21, 22
+        Jour 87 - 1 Samuel 23, 24, 25
+        Jour 88 - 1 Samuel 26, 27, 28
+        Jour 89 - 1 Samuel 29, 30, 31
+        Jour 90 - 2 Samuel 1, 2, 3
+        Jour 91 - 2 Samuel 4, 5, 6
+        Jour 92 - 2 Samuel 7, 8, 9
+        Jour 93 - 2 Samuel 10, 11, 12
+        Jour 94 - 2 Samuel 13, 14, 15
+        Jour 95 - 2 Samuel 16, 17, 18
+        Jour 96 - 2 Samuel 19, 20, 21
+        Jour 97 - 2 Samuel 22, 23, 24
+        Jour 98 - 1 Rois 1, 2, 3
+        Jour 99 - 1 Rois 4, 5, 6
+        Jour 100 - 1 Rois 7, 8, 9
+        Jour 101 - 1 Rois 10, 11, 12
+        Jour 102 - 1 Rois 13, 14, 15
+        Jour 103 - 1 Rois 16, 17, 18
+        Jour 104 - 1 Rois 19, 20, 21
+        Jour 105 - 1 Rois 22 ; 2 Rois 1, 2
+        Jour 106 - 2 Rois 3, 4, 5
+        Jour 107 - 2 Rois 6, 7, 8
+        Jour 108 - 2 Rois 9, 10, 11
+        Jour 109 - 2 Rois 12, 13, 14
+        Jour 110 - 2 Rois 15, 16, 17
+        Jour 111 - 2 Rois 18, 19, 20
+        Jour 112 - 2 Rois 21, 22, 23
+        Jour 113 - 2 Rois 24, 25 ; 1 Chroniques 1
+        Jour 114 - 1 Chroniques 2, 3, 4
+        Jour 115 - 1 Chroniques 5, 6, 7
+        Jour 116 - 1 Chroniques 8, 9, 10
+        Jour 117 - 1 Chroniques 11, 12, 13
+        Jour 118 - 1 Chroniques 14, 15, 16
+        Jour 119 - 1 Chroniques 17, 18, 19
+        Jour 120 - 1 Chroniques 20, 21, 22
+        Jour 121 - 1 Chroniques 23, 24, 25
+        Jour 122 - 1 Chroniques 26, 27, 28
+        Jour 123 - 1 Chroniques 29 ; 2 Chroniques 1
+        Jour 124 - 2 Chroniques 2, 3, 4
+        Jour 125 - 2 Chroniques 5, 6, 7
+        Jour 126 - 2 Chroniques 8, 9, 10
+        Jour 127 - 2 Chroniques 11, 12, 13
+        Jour 128 - 2 Chroniques 14, 15, 16
+        Jour 129 - 2 Chroniques 17, 18, 19
+        Jour 130 - 2 Chroniques 20, 21, 22
+        Jour 131 - 2 Chroniques 23, 24, 25
+        Jour 132 - 2 Chroniques 26, 27, 28
+        Jour 133 - 2 Chroniques 29, 30, 31
+        Jour 134 - 2 Chroniques 32, 33, 34
+        Jour 135 - 2 Chroniques 35, 36 ; Esdras 1
+        Jour 136 - Esdras 2, 3, 4
+        Jour 137 - Esdras 5, 6, 7
+        Jour 138 - Esdras 8, 9, 10
+        Jour 139 - Néhémie 1, 2, 3
+        Jour 140 - Néhémie 4, 5, 6
+        Jour 141 - Néhémie 7, 8, 9
+        Jour 142 - Néhémie 10, 11, 12
+        Jour 143 - Néhémie 13 ; Esther 1
+        Jour 144 - Esther 2, 3, 4
+        Jour 145 - Esther 5, 6, 7
+        Jour 146 - Esther 8, 9, 10
+        Jour 147 - Job 1, 2, 3
+        Jour 148 - Job 4, 5, 6
+        Jour 149 - Job 7, 8, 9
+        Jour 150 - Job 10, 11, 12
+        Jour 151 - Job 13, 14, 15
+        Jour 152 - Job 16, 17, 18
+        Jour 153 - Job 19, 20, 21
+        Jour 154 - Job 22, 23, 24
+        Jour 155 - Job 25, 26, 27
+        Jour 156 - Job 28, 29, 30
+        Jour 157 - Job 31, 32, 33
+        Jour 158 - Job 34, 35, 36
+        Jour 159 - Job 37, 38, 39
+        Jour 160 - Job 40, 41, 42
+        Jour 161 - Psaumes 1, 2, 3
+        Jour 162 - Psaumes 4, 5, 6
+        Jour 163 - Psaumes 7, 8, 9
+        Jour 164 - Psaumes 10, 11, 12
+        Jour 165 - Psaumes 13, 14, 15
+        Jour 166 - Psaumes 16, 17, 18
+        Jour 167 - Psaumes 19, 20, 21
+        Jour 168 - Psaumes 22, 23, 24
+        Jour 169 - Psaumes 25, 26, 27
+        Jour 170 - Psaumes 28, 29, 30
+        Jour 171 - Psaumes 31, 32, 33
+        Jour 172 - Psaumes 34, 35, 36
+        Jour 173 - Psaumes 37, 38, 39
+        Jour 174 - Psaumes 40, 41, 42
+        Jour 175 - Psaumes 43, 44, 45
+        Jour 176 - Psaumes 46, 47, 48
+        Jour 177 - Psaumes 49, 50, 51
+        Jour 178 - Psaumes 52, 53, 54
+        Jour 179 - Psaumes 55, 56, 57
+        Jour 180 - Psaumes 58, 59, 60
+        Jour 181 - Psaumes 61, 62, 63
+        Jour 182 - Psaumes 64, 65, 66
+        Jour 183 - Psaumes 67, 68, 69
+        Jour 184 - Psaumes 70, 71, 72
+        Jour 185 - Psaumes 73, 74, 75
+        Jour 186 - Psaumes 76, 77, 78
+        Jour 187 - Psaumes 79, 80, 81
+        Jour 188 - Psaumes 82, 83, 84
+        Jour 189 - Psaumes 85, 86, 87
+        Jour 190 - Psaumes 88, 89, 90
+        Jour 191 - Psaumes 91, 92, 93
+        Jour 192 - Psaumes 94, 95, 96
+        Jour 193 - Psaumes 97, 98, 99
+        Jour 194 - Psaumes 100, 101, 102
+        Jour 195 - Psaumes 103, 104, 105
+        Jour 196 - Psaumes 106, 107, 108
+        Jour 197 - Psaumes 109, 110, 111
+        Jour 198 - Psaumes 112, 113, 114
+        Jour 199 - Psaumes 115, 116, 117
+        Jour 200 - Psaumes 118, 119, 120
+        Jour 201 - Psaumes 121, 122, 123
+        Jour 202 - Psaumes 124, 125, 126
+        Jour 203 - Psaumes 127, 128, 129
+        Jour 204 - Psaumes 130, 131, 132
+        Jour 205 - Psaumes 133, 134, 135
+        Jour 206 - Psaumes 136, 137, 138
+        Jour 207 - Psaumes 139, 140, 141
+        Jour 208 - Psaumes 142, 143, 144
+        Jour 209 - Psaumes 145, 146, 147
+        Jour 210 - Psaumes 148, 149, 150
+        Jour 211 - Proverbes 1, 2, 3
+        Jour 212 - Proverbes 4, 5, 6
+        Jour 213 - Proverbes 7, 8, 9
+        Jour 214 - Proverbes 10, 11, 12
+        Jour 215 - Proverbes 13, 14, 15
+        Jour 216 - Proverbes 16, 17, 18
+        Jour 217 - Proverbes 19, 20, 21
+        Jour 218 - Proverbes 22, 23, 24
+        Jour 219 - Proverbes 25, 26, 27
+        Jour 220 - Proverbes 28, 29, 30
+        Jour 221 - Proverbes 31 ; Ecclésiaste 1
+        Jour 222 - Ecclésiaste 2, 3, 4
+        Jour 223 - Ecclésiaste 5, 6, 7
+        Jour 224 - Ecclésiaste 8, 9, 10
+        Jour 225 - Ecclésiaste 11, 12 ; Cantique des Cantiques 1
+        Jour 226 - Cantique des Cantiques 2, 3, 4
+        Jour 227 - Cantique des Cantiques 5, 6, 7
+        Jour 228 - Cantique des Cantiques 8 ; Isaïe 1
+        Jour 229 - Isaïe 2, 3, 4
+        Jour 230 - Isaïe 5, 6, 7
+        Jour 231 - Isaïe 8, 9, 10
+        Jour 232 - Isaïe 11, 12, 13
+        Jour 233 - Isaïe 14, 15, 16
+        Jour 234 - Isaïe 17, 18, 19
+        Jour 235 - Isaïe 20, 21, 22
+        Jour 236 - Isaïe 23, 24, 25
+        Jour 237 - Isaïe 26, 27, 28
+        Jour 238 - Isaïe 29, 30, 31
+        Jour 239 - Isaïe 32, 33, 34
+        Jour 240 - Isaïe 35, 36, 37
+        Jour 241 - Isaïe 38, 39, 40
+        Jour 242 - Isaïe 41, 42, 43
+        Jour 243 - Isaïe 44, 45, 46
+        Jour 244 - Isaïe 47, 48, 49
+        Jour 245 - Isaïe 50, 51, 52
+        Jour 246 - Isaïe 53, 54, 55
+        Jour 247 - Isaïe 56, 57, 58
+        Jour 248 - Isaïe 59, 60, 61
+        Jour 249 - Isaïe 62, 63, 64
+        Jour 250 - Isaïe 65, 66 ; Jérémie 1
+        Jour 251 - Jérémie 2, 3, 4
+        Jour 252 - Jérémie 5, 6, 7
+        Jour 253 - Jérémie 8, 9, 10
+        Jour 254 - Jérémie 11, 12, 13
+        Jour 255 - Jérémie 14, 15, 16
+        Jour 256 - Jérémie 17, 18, 19
+        Jour 257 - Jérémie 20, 21, 22
+        Jour 258 - Jérémie 23, 24, 25
+        Jour 259 - Jérémie 26, 27, 28
+        Jour 260 - Jérémie 29, 30, 31
+        Jour 261 - Jérémie 32, 33, 34
+        Jour 262 - Jérémie 35, 36, 37
+        Jour 263 - Jérémie 38, 39, 40
+        Jour 264 - Jérémie 41, 42, 43
+        Jour 265 - Jérémie 44, 45, 46
+        Jour 266 - Jérémie 47, 48, 49
+        Jour 267 - Jérémie 50, 51, 52
+        Jour 268 - Lamentations 1, 2, 3
+        Jour 269 - Lamentations 4, 5 ; Ézéchiel 1
+        Jour 270 - Ézéchiel 2, 3, 4
+        Jour 271 - Ézéchiel 5, 6, 7
+        Jour 272 - Ézéchiel 8, 9, 10
+        Jour 273 - Ézéchiel 11, 12, 13
+        Jour 274 - Ézéchiel 14, 15, 16
+        Jour 275 - Ézéchiel 17, 18, 19
+        Jour 276 - Ézéchiel 20, 21, 22
+        Jour 277 - Ézéchiel 23, 24, 25
+        Jour 278 - Ézéchiel 26, 27, 28
+        Jour 279 - Ézéchiel 29, 30, 31
+        Jour 280 - Ézéchiel 32, 33, 34
+        Jour 281 - Ézéchiel 35, 36, 37
+        Jour 282 - Ézéchiel 38, 39, 40
+        Jour 283 - Ézéchiel 41, 42, 43
+        Jour 284 - Ézéchiel 44, 45, 46
+        Jour 285 - Ézéchiel 47, 48 ; Daniel 1
+        Jour 286 - Daniel 2, 3, 4
+        Jour 287 - Daniel 5, 6, 7
+        Jour 288 - Daniel 8, 9, 10
+        Jour 289 - Daniel 11, 12 ; Osée 1
+        Jour 290 - Osée 2, 3, 4
+        Jour 291 - Osée 5, 6, 7
+        Jour 292 - Osée 8, 9, 10
+        Jour 293 - Osée 11, 12, 13
+        Jour 294 - Osée 14 ; Joël 1, 2
+        Jour 295 - Joël 3 ; Amos 1, 2
+        Jour 296 - Amos 3, 4, 5
+        Jour 297 - Amos 6, 7, 8
+        Jour 298 - Amos 9 ; Abdias 1 ; Jonas 1
+        Jour 299 - Jonas 2, 3, 4 ; Michée 1
+        Jour 300 - Michée 2, 3, 4
+        Jour 301 - Michée 5, 6, 7
+        Jour 302 - Nahum 1, 2, 3 ; Habacuc 1
+        Jour 303 - Habacuc 2, 3 ; Sophonie 1
+        Jour 304 - Sophonie 2, 3 ; Aggée 1
+        Jour 305 - Aggée 2 ; Zacharie 1, 2
+        Jour 306 - Zacharie 3, 4, 5
+        Jour 307 - Zacharie 6, 7, 8
+        Jour 308 - Zacharie 9, 10, 11
+        Jour 309 - Zacharie 12, 13, 14
+        Jour 310 - Malachie 1, 2, 3
+        Jour 311 - Malachie 4 ; Matthieu 1, 2
+        Jour 312 - Matthieu 3, 4, 5
+        Jour 313 - Matthieu 6, 7, 8
+        Jour 314 - Matthieu 9, 10, 11
+        Jour 315 - Matthieu 12, 13, 14
+        Jour 316 - Matthieu 15, 16, 17
+        Jour 317 - Matthieu 18, 19, 20
+        Jour 318 - Matthieu 21, 22, 23
+        Jour 319 - Matthieu 24, 25, 26
+        Jour 320 - Matthieu 27, 28 ; Marc 1
+        Jour 321 - Marc 2, 3, 4
+        Jour 322 - Marc 5, 6, 7
+        Jour 323 - Marc 8, 9, 10
+        Jour 324 - Marc 11, 12, 13
+        Jour 325 - Marc 14, 15, 16
+        Jour 326 - Luc 1, 2, 3
+        Jour 327 - Luc 4, 5, 6
+        Jour 328 - Luc 7, 8, 9
+        Jour 329 - Luc 10, 11, 12
+        Jour 330 - Luc 13, 14, 15
+        Jour 331 - Luc 16, 17, 18
+        Jour 332 - Luc 19, 20, 21
+        Jour 333 - Luc 22, 23, 24
+        Jour 334 - Jean 1, 2, 3
+        Jour 335 - Jean 4, 5, 6
+        Jour 336 - Jean 7, 8, 9
+        Jour 337 - Jean 10, 11, 12
+        Jour 338 - Jean 13, 14, 15
+        Jour 339 - Jean 16, 17, 18
+        Jour 340 - Jean 19, 20, 21
+        Jour 341 - Actes 1, 2, 3
+        Jour 342 - Actes 4, 5, 6
+        Jour 343 - Actes 7, 8, 9
+        Jour 344 - Actes 10, 11, 12
+        Jour 345 - Actes 13, 14, 15
+        Jour 346 - Actes 16, 17, 18
+        Jour 347 - Actes 19, 20, 21
+        Jour 348 - Actes 22, 23, 24
+        Jour 349 - Actes 25, 26, 27
+        Jour 350 - Actes 28 ; Romains 1
+        Jour 351 - Romains 2, 3, 4
+        Jour 352 - Romains 5, 6, 7
+        Jour 353 - Romains 8, 9, 10
+        Jour 354 - Romains 11, 12, 13
+        Jour 355 - Romains 14, 15, 16
+        Jour 356 - 1 Corinthiens 1, 2, 3
+        Jour 357 - 1 Corinthiens 4, 5, 6
+        Jour 358 - 1 Corinthiens 7, 8, 9
+        Jour 359 - 1 Corinthiens 10, 11, 12
+        Jour 360 - 1 Corinthiens 13, 14, 15
+        Jour 361 - 1 Corinthiens 16 ; 2 Corinthiens 1, 2
+        Jour 362 - 2 Corinthiens 3, 4, 5
+        Jour 363 - 2 Corinthiens 6, 7, 8
+        Jour 364 - 2 Corinthiens 9, 10, 11
+        Jour 365 - 2 Corinthiens 12, 13 ; Galates 1, 2
+        `;
 
-        let userNovenasState = {}; // Stores start dates for each novena: { "st_michel": "YYYY-MM-DD", "sainte_marie": "YYYY-MM-DD" }
-        let selectedNovenaId = ""; // Stores the ID of the currently selected novena in the dropdown
-        let displayedNovenaDay = 0; // The day currently displayed in the novena section (1-9)
+        // Références aux éléments du DOM pour le plan biblique
+        const biblePlanSection = document.getElementById('bible-plan-section');
+        const currentDayText = document.getElementById('current-day-text');
+        const currentReadingText = document.getElementById('current-reading-text');
+        const prevDayBtn = document.getElementById('prev-day-btn');
+        const nextDayBtn = document.getElementById('next-day-btn');
+        const openReadingBtn = document.getElementById('open-reading-btn');
+        const prevDateSpan = document.getElementById('prev-date');
+        const nextDateSpan = document.getElementById('next-date');
 
+        // Références aux éléments du DOM pour la section Neuvaines
+        const novenasStandaloneSection = document.getElementById('novenas-standalone-section');
+        const novenaSelect = document.getElementById('novena-select');
+        const novenaStartDateInput = document.getElementById('novena-start-date');
+        const prevNovenaDayBtn = document.getElementById('prev-novena-day-btn');
+        const nextNovenaDayBtn = document.getElementById('next-novena-day-btn');
+        const novenaMainTitle = document.getElementById('novena-main-title');
+        const novenaPhoto = document.getElementById('neuvaine-photo');
+        const photoUpload = document.getElementById('photoUpload');
+        const bougie = document.getElementById('bougie');
+        const demandeDuJourTextarea = document.getElementById('demandeDuJour');
+        const saveDemandeBtn = document.getElementById('saveDemande');
+        const initialPrayersContainer = document.getElementById('initial-prayers');
+        const dailyPrayerTitle = document.getElementById('daily-prayer-title');
+        const dailyPrayerText = document.getElementById('daily-prayer-text');
+
+        // Boîte de message temporaire
+        const messageBox = document.getElementById('message-box');
+
+        // Variables d'état de l'application
+        let readingPlan = [];
+        let currentDayIndex = 0; // Index du jour dans le plan de lecture (0-indexé)
+        let userNovenasState = {}; // Stocke les dates de début pour chaque neuvaine
+        let selectedNovenaId = ""; // ID de la neuvaine actuellement sélectionnée
+        let displayedNovenaDay = 0; // Le jour actuellement affiché dans la section neuvaine (1-9)
+
+        // ====================================================================================
+        // FONCTIONS UTILITAIRES
+        // ====================================================================================
+        
         /**
          * Affiche un message temporaire à l'écran.
          * @param {string} message - Le texte du message à afficher.
@@ -210,38 +678,25 @@
 
         /**
          * Analyse le texte brut du plan de lecture et le convertit en un tableau d'objets.
-         * Chaque objet contient le numéro du jour, la référence de la lecture, et l'URL BibleGateway.
          * @param {string} rawText - Le texte brut du plan de lecture.
          * @returns {Array<Object>} Un tableau d'objets { day: number, reading: string, bibleGatewayUrl: string }.
          */
         function parseReadingPlan(rawText) {
             const lines = rawText.split('\n');
             const parsedPlan = [];
-            let dayCounter = 0;
-
             lines.forEach(line => {
                 const trimmedLine = line.trim();
-                // Expression régulière pour extraire "Jour X - Référence de lecture"
                 const match = trimmedLine.match(/Jour (\d+) - (.+)/);
                 if (match) {
                     const dayNum = parseInt(match[1], 10);
                     const reading = match[2];
-
-                    // Vérifie que les jours sont séquentiels avant d'ajouter au plan
-                    if (dayNum === dayCounter + 1) {
-                        // Construire l'URL pour BibleGateway
-                        // Remplacer les virgules par des points-virgules pour BibleGateway et encoder l'URL
-                        const encodedReading = encodeURIComponent(reading.replace(/,/g, '; '));
-                        // Mise à jour de la version de la Bible vers NEG1979
-                        const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReading}&version=NEG1979`;
-
-                        parsedPlan.push({
-                            day: dayNum,
-                            reading: reading,
-                            bibleGatewayUrl: bibleGatewayUrl
-                        });
-                        dayCounter++;
-                    }
+                    const encodedReading = encodeURIComponent(reading.replace(/,/g, '; '));
+                    const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReading}&version=NEG1979`;
+                    parsedPlan.push({
+                        day: dayNum,
+                        reading: reading,
+                        bibleGatewayUrl: bibleGatewayUrl
+                    });
                 }
             });
             return parsedPlan;
@@ -253,83 +708,33 @@
          */
         function getDayOfYear() {
             const now = new Date();
-            const start = new Date(now.getFullYear(), 0, 0); // Début de l'année
-            // Calcule la différence en millisecondes et ajuste pour le décalage horaire
+            const start = new Date(now.getFullYear(), 0, 0);
             const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-            const oneDay = 1000 * 60 * 60 * 24; // Millisecondes dans un jour
+            const oneDay = 1000 * 60 * 60 * 24;
             return Math.floor(diff / oneDay);
         }
 
         /**
          * Obtient la date réelle pour un décalage de jour donné par rapport au jour actuel de l'année.
-         * @param {number} dayOffset - Le décalage en jours (ex: -1 pour le jour précédent, 1 pour le jour suivant).
+         * @param {number} dayOffset - Le décalage en jours.
          * @returns {string} La date formatée (ex: "01 Jan").
          */
         function getRealDate(dayOffset) {
             const today = new Date();
             const targetDate = new Date(today);
             targetDate.setDate(today.getDate() + dayOffset);
-
             const options = { day: '2-digit', month: 'short' };
             return targetDate.toLocaleDateString('fr-FR', options);
         }
 
         /**
-         * Met à jour l'affichage avec la lecture du jour actuel.
-         */
-        function updateBiblePlanDisplay() {
-            if (readingPlan.length === 0) {
-                currentDayText.textContent = "Aucun plan de lecture disponible.";
-                currentReadingText.textContent = "";
-                prevDayBtn.disabled = true;
-                nextDayBtn.disabled = true;
-                openReadingBtn.disabled = true;
-                prevDateSpan.textContent = "";
-                nextDateSpan.textContent = "";
-                return;
-            }
-
-            // S'assure que l'index du jour est dans les limites du tableau
-            if (currentDayIndex < 0) {
-                currentDayIndex = 0;
-            } else if (currentDayIndex >= readingPlan.length) {
-                currentDayIndex = readingPlan.length - 1;
-            }
-
-            const currentEntry = readingPlan[currentDayIndex];
-            currentDayText.textContent = `Jour ${currentEntry.day}`;
-            currentReadingText.textContent = currentEntry.reading;
-
-            // Active/désactive les boutons de navigation en fonction de l'index
-            prevDayBtn.disabled = currentDayIndex === 0;
-            nextDayBtn.disabled = currentDayIndex === readingPlan.length - 1;
-            openReadingBtn.disabled = false;
-
-            // Met à jour les dates réelles pour les boutons de navigation
-            if (currentDayIndex > 0) {
-                prevDateSpan.textContent = `(${getRealDate(currentDayIndex - getDayOfYear())})`;
-            } else {
-                prevDateSpan.textContent = "";
-            }
-
-            if (currentDayIndex < readingPlan.length - 1) {
-                nextDateSpan.textContent = `(${getRealDate(currentDayIndex + 1 - getDayOfYear())})`;
-            } else {
-                nextDateSpan.textContent = "";
-            }
-
-            // Met à jour l'URL du bouton "Lire le Texte"
-            openReadingBtn.onclick = () => {
-                window.open(currentEntry.bibleGatewayUrl, '_blank');
-            };
-        }
-
-        /**
-         * Sauvegarde l'état des neuvaines dans le stockage local.
+         * Sauvegarde l'état des neuvaines (dates de début, photos, bougie) dans le stockage local.
          */
         function saveNovenasState() {
             localStorage.setItem('userNovenasState', JSON.stringify(userNovenasState));
-            localStorage.setItem('selectedNovenaId', selectedNovenaId);
+            localStorage.setItem('neuvainePhoto', novenaPhoto.src);
+            localStorage.setItem('bougieLit', bougie.classList.contains('bougie-lit'));
+            localStorage.setItem('demandeDuJourTextarea', demandeDuJourTextarea.value);
         }
 
         /**
@@ -340,579 +745,226 @@
             if (savedState) {
                 userNovenasState = JSON.parse(savedState);
             }
-            const savedSelectedNovenaId = localStorage.getItem('selectedNovenaId');
-            if (savedSelectedNovenaId && novenasDefinitions.some(n => n.id === savedSelectedNovenaId)) {
-                selectedNovenaId = savedSelectedNovenaId;
-            } else if (novenasDefinitions.length > 0) {
-                selectedNovenaId = novenasDefinitions[0].id; // Sélectionne la première neuvaine par défaut
+            const savedPhoto = localStorage.getItem('neuvainePhoto');
+            if (savedPhoto) {
+                novenaPhoto.src = savedPhoto;
             }
+            const savedBougie = localStorage.getItem('bougieLit');
+            if (savedBougie === 'true') {
+                bougie.src = "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/candle-lit.png";
+                bougie.classList.add('bougie-lit');
+            }
+            const savedDemande = localStorage.getItem('demandeDuJourTextarea');
+            if (savedDemande) {
+                demandeDuJourTextarea.value = savedDemande;
+            }
+        }
+        
+        /**
+         * Calcule le jour actuel d'une neuvaine en fonction de sa date de début.
+         * @param {string} startDateString - La date de début de la neuvaine au format YYYY-MM-DD.
+         * @returns {number} Le jour de la neuvaine (1-9), ou 0 si non en cours.
+         */
+        function calculateNovenaDay(startDateString) {
+            if (!startDateString) return 0;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startDate = new Date(startDateString);
+            const diffInDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            // Le jour 0 est le premier jour, donc on ajoute 1 pour obtenir le jour de la neuvaine
+            const day = diffInDays + 1;
+            return (day > 0 && day <= 9) ? day : 0;
         }
 
         /**
-         * Met à jour l'affichage de la section des neuvaines.
+         * Met à jour l'affichage de la neuvaine avec la prière du jour sélectionné.
+         * @param {string} novenaId - L'ID de la neuvaine.
+         * @param {number} dayNumber - Le jour de la neuvaine (1-9).
          */
-        function updateNovenasDisplay() {
-            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
+        function updateNovenaDisplay(novenaId, dayNumber) {
+            const novena = novenasDefinitions.find(n => n.id === novenaId);
+            if (!novena) {
+                dailyPrayerTitle.textContent = "Aucune neuvaine sélectionnée";
+                dailyPrayerText.textContent = "Veuillez choisir une neuvaine.";
+                return;
+            }
+            const day = novena.days.find(d => d.day === dayNumber);
+            if (day) {
+                novenaMainTitle.textContent = `${novena.name} - Jour ${dayNumber}`;
+                dailyPrayerTitle.textContent = day.title;
+                dailyPrayerText.textContent = day.text;
+                displayedNovenaDay = dayNumber;
+            } else {
+                novenaMainTitle.textContent = novena.name;
+                dailyPrayerTitle.textContent = "Fin de la Neuvaine";
+                dailyPrayerText.textContent = "La neuvaine est terminée ou non commencée.";
+                displayedNovenaDay = 0;
+            }
+            updateNovenaNavigationButtons();
+        }
 
-            if (!selectedNovena) {
-                novenaTitle.textContent = "Mes Neuvaines";
-                novenasContentPlaceholder.textContent = "Veuillez choisir une neuvaine.";
-                novenaStartDateInput.value = "";
-                novenaStartDateInput.disabled = true;
-                chooseDayBtn.disabled = true;
+        /**
+         * Met à jour les boutons de navigation de la neuvaine (précédent/suivant).
+         */
+        function updateNovenaNavigationButtons() {
+            if (!selectedNovenaId) {
                 prevNovenaDayBtn.disabled = true;
                 nextNovenaDayBtn.disabled = true;
                 return;
             }
-
-            // Met à jour la sélection dans le menu déroulant
-            novenaSelect.value = selectedNovenaId;
-
-            // Met à jour le champ de date de début
-            const storedStartDate = userNovenasState[selectedNovenaId];
-            novenaStartDateInput.value = storedStartDate || "";
-            novenaStartDateInput.disabled = false;
-
-            // Affiche le contenu de la neuvaine en fonction du jour affiché
-            if (displayedNovenaDay > 0 && displayedNovenaDay <= selectedNovena.days.length) {
-                const currentNovenaEntry = selectedNovena.days[displayedNovenaDay - 1]; // -1 car le tableau est 0-indexé
-                novenaTitle.textContent = `${selectedNovena.name} - Jour ${currentNovenaEntry.day}`;
-                novenasContentPlaceholder.textContent = `${currentNovenaEntry.title}: ${currentNovenaEntry.text}`;
-            } else {
-                novenaTitle.textContent = selectedNovena.name;
-                novenasContentPlaceholder.textContent = "Veuillez définir une date de début et cliquer sur 'Choisir le Jour' pour commencer la neuvaine.";
-            }
-
-            // Active/désactive les boutons de navigation des jours de neuvaine
             prevNovenaDayBtn.disabled = displayedNovenaDay <= 1;
-            nextNovenaDayBtn.disabled = displayedNovenaDay >= selectedNovena.days.length;
-            chooseDayBtn.disabled = !storedStartDate; // Active le bouton si une date de début est définie
+            nextNovenaDayBtn.disabled = displayedNovenaDay >= 9;
         }
 
         /**
-         * Remplit le menu déroulant des neuvaines avec les définitions disponibles.
+         * Gère le changement de sélection de la neuvaine.
          */
-        function populateNovenaDropdown() {
-            novenaSelect.innerHTML = ''; // Efface les options existantes
+        function handleNovenaSelection() {
+            selectedNovenaId = novenaSelect.value;
+            const startDateString = userNovenasState[selectedNovenaId];
+            if (startDateString) {
+                novenaStartDateInput.value = startDateString;
+                novenaStartDateInput.disabled = false;
+            } else {
+                novenaStartDateInput.value = '';
+                novenaStartDateInput.disabled = false;
+            }
+            const calculatedDay = calculateNovenaDay(novenaStartDateInput.value);
+            if (calculatedDay > 0) {
+                updateNovenaDisplay(selectedNovenaId, calculatedDay);
+            } else {
+                updateNovenaDisplay(selectedNovenaId, 1);
+            }
+        }
+        
+        // ====================================================================================
+        // LOGIQUE ET ÉVÉNEMENTS
+        // ====================================================================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- Initialisation du Plan de Lecture --
+            readingPlan = parseReadingPlan(rawBibleReadingPlan);
+            currentDayIndex = getDayOfYear() - 1; // Jour de l'année est 1-indexé, le tableau est 0-indexé
+            updateBiblePlanDisplay();
+            
+            // -- Événements du Plan de Lecture --
+            prevDayBtn.addEventListener('click', () => {
+                currentDayIndex--;
+                updateBiblePlanDisplay();
+            });
 
-            if (novenasDefinitions.length === 0) {
-                const option = document.createElement('option');
-                option.value = "";
-                option.textContent = "Aucune neuvaine disponible";
-                novenaSelect.appendChild(option);
-                novenaSelect.disabled = true;
-                return;
+            nextDayBtn.addEventListener('click', () => {
+                currentDayIndex++;
+                updateBiblePlanDisplay();
+            });
+
+            function updateBiblePlanDisplay() {
+                if (readingPlan.length === 0) {
+                    currentDayText.textContent = "Aucun plan de lecture disponible.";
+                    currentReadingText.textContent = "";
+                    prevDayBtn.disabled = true;
+                    nextDayBtn.disabled = true;
+                    openReadingBtn.disabled = true;
+                    prevDateSpan.textContent = "";
+                    nextDateSpan.textContent = "";
+                    return;
+                }
+                if (currentDayIndex < 0) currentDayIndex = 0;
+                if (currentDayIndex >= readingPlan.length) currentDayIndex = readingPlan.length - 1;
+
+                const currentEntry = readingPlan[currentDayIndex];
+                currentDayText.textContent = `Jour ${currentEntry.day}`;
+                currentReadingText.textContent = currentEntry.reading;
+                
+                prevDayBtn.disabled = currentDayIndex === 0;
+                nextDayBtn.disabled = currentDayIndex === readingPlan.length - 1;
+                openReadingBtn.disabled = false;
+
+                if (currentDayIndex > 0) {
+                    prevDateSpan.textContent = `(${getRealDate(currentDayIndex - (getDayOfYear() - 1))})`;
+                } else {
+                    prevDateSpan.textContent = "";
+                }
+
+                if (currentDayIndex < readingPlan.length - 1) {
+                    nextDateSpan.textContent = `(${getRealDate(currentDayIndex + 1 - (getDayOfYear() - 1))})`;
+                } else {
+                    nextDateSpan.textContent = "";
+                }
+
+                openReadingBtn.onclick = () => {
+                    window.open(currentEntry.bibleGatewayUrl, '_blank');
+                };
             }
 
-            novenaSelect.disabled = false;
+            // -- Initialisation de la section Neuvaines --
+            loadNovenasState();
+            
             novenasDefinitions.forEach(novena => {
                 const option = document.createElement('option');
                 option.value = novena.id;
                 option.textContent = novena.name;
                 novenaSelect.appendChild(option);
             });
+            novenaSelect.value = Object.keys(userNovenasState)[0] || novenasDefinitions[0].id;
+            handleNovenaSelection();
+            
+            // -- Événements de la section Neuvaines --
+            novenaSelect.addEventListener('change', handleNovenaSelection);
 
-            // Sélectionne la neuvaine chargée ou la première par défaut
-            if (selectedNovenaId) {
-                novenaSelect.value = selectedNovenaId;
-            } else if (novenasDefinitions.length > 0) {
-                selectedNovenaId = novenasDefinitions[0].id;
-                novenaSelect.value = selectedNovenaId;
-            }
-        }
-
-        // Écouteurs d'événements pour les boutons de navigation du plan biblique
-        prevDayBtn.addEventListener('click', () => {
-            if (currentDayIndex > 0) {
-                currentDayIndex--;
-                updateBiblePlanDisplay();
-            }
-        });
-
-        nextDayBtn.addEventListener('click', () => {
-            if (currentDayIndex < readingPlan.length - 1) {
-                currentDayIndex++;
-                updateBiblePlanDisplay();
-            }
-        });
-
-        // Écouteurs d'événements pour la section Neuvaines
-        novenaSelect.addEventListener('change', (event) => {
-            selectedNovenaId = event.target.value;
-            displayedNovenaDay = 0; // Réinitialise le jour affiché lors du changement de neuvaine
-            saveNovenasState(); // Sauvegarde la nouvelle neuvaine sélectionnée
-            updateNovenasDisplay();
-        });
-
-        novenaStartDateInput.addEventListener('change', (event) => {
-            if (selectedNovenaId) {
-                userNovenasState[selectedNovenaId] = event.target.value;
+            novenaStartDateInput.addEventListener('change', () => {
+                const newDate = novenaStartDateInput.value;
+                userNovenasState[selectedNovenaId] = newDate;
                 saveNovenasState();
-                showMessage("Date de début enregistrée.");
-                // Active le bouton "Choisir le Jour" si une date est sélectionnée
-                chooseDayBtn.disabled = !event.target.value;
-            }
-        });
-
-        chooseDayBtn.addEventListener('click', () => {
-            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
-            if (!selectedNovena) {
-                showMessage("Veuillez d'abord choisir une neuvaine.");
-                return;
-            }
-
-            const storedStartDate = userNovenasState[selectedNovenaId];
-            if (!storedStartDate) {
-                showMessage("Veuillez définir une date de début pour cette neuvaine.");
-                return;
-            }
-
-            const startDate = new Date(storedStartDate);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Normalise la date d'aujourd'hui au début du jour
-
-            const diffTime = today.getTime() - startDate.getTime(); // Différence en millisecondes
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Différence en jours
-
-            // Si aujourd'hui est avant la date de début, ou si c'est le jour de début (diffDays = 0), on est au jour 1
-            if (diffDays < 0) { // If today is before the start date
-                displayedNovenaDay = 1;
-                showMessage(`La neuvaine commencera le ${startDate.toLocaleDateString()}.`);
-            } else {
-                displayedNovenaDay = diffDays + 1; // +1 car diffDays est 0 pour le premier jour, 1 pour le deuxième, etc.
-            }
-
-
-            // Limite le jour au nombre maximum de jours pour la neuvaine
-            if (displayedNovenaDay > selectedNovena.days.length) {
-                displayedNovenaDay = selectedNovena.days.length;
-                showMessage(`Félicitations ! Vous avez terminé la neuvaine à ${selectedNovena.name}.`);
-            } else if (displayedNovenaDay <= 0) { // Ensure it's at least day 1
-                displayedNovenaDay = 1;
-            } else {
-                showMessage(`Vous êtes au Jour ${displayedNovenaDay} de la neuvaine à ${selectedNovena.name}.`);
-            }
-
-            updateNovenasDisplay();
-        });
-
-        prevNovenaDayBtn.addEventListener('click', () => {
-            if (displayedNovenaDay > 1) {
-                displayedNovenaDay--;
-                updateNovenasDisplay();
-            }
-        });
-
-        nextNovenaDayBtn.addEventListener('click', () => {
-            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
-            if (selectedNovena && displayedNovenaDay < selectedNovena.days.length) {
-                displayedNovenaDay++;
-                updateNovenasDisplay();
-            }
-        });
-
-
-        // --- Initialisation Principale de l'Application ---
-        window.onload = async function() {
-            // Le plan de lecture est intégré directement dans le code JavaScript.
-            const hardcodedPlan = `
-Nouveau Testament et Psaumes en 1 an - Jour 1 - Actes 1.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 2 - Actes 2.1-47
-Nouveau Testament et Psaumes en 1 an - Jour 3 - Actes 3.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 4 - Actes 4.1-37
-Nouveau Testament et Psaumes en 1 an - Jour 5 - Actes 5.1-42
-Nouveau Testament et Psaumes en 1 an - Jour 6 - Actes 6.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 7 - Actes 7.1-60
-Nouveau Testament et Psaumes en 1 an - Jour 8 - Actes 8.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 9 - Actes 9.1-43
-Nouveau Testament et Psaumes en 1 an - Jour 10 - Actes 10.1-48
-Nouveau Testament et Psaumes en 1 an - Jour 11 - Actes 11.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 12 - Actes 12.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 13 - Actes 13.1-52
-Nouveau Testament et Psaumes en 1 an - Jour 14 - Actes 14.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 15 - Actes 15.1-41
-Nouveau Testament et Psaumes en 1 an - Jour 16 - Actes 16.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 17 - Actes 17.1-34
-Nouveau Testament et Psaumes en 1 an - Jour 18 - Actes 18.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 19 - Actes 19.1-41
-Nouveau Testament et Psaumes en 1 an - Jour 20 - Actes 20.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 21 - Actes 21.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 22 - Actes 22.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 23 - Actes 23.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 24 - Actes 24.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 25 - Actes 25.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 26 - Actes 26.1-32
-Nouveau Testament et Psaumes en 1 an - Jour 27 - Actes 27.1-44
-Nouveau Testament et Psaumes en 1 an - Jour 28 - Actes 28.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 29 - Romains 1.1-32
-Nouveau Testament et Psaumes en 1 an - Jour 30 - Romains 2.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 31 - Romains 3.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 32 - Romains 4.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 33 - Romains 5.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 34 - Romains 6.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 35 - Romains 7.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 36 - Romains 8.1-39
-Nouveau Testament et Psaumes en 1 an - Jour 37 - Romains 9.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 38 - Romains 10.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 39 - Romains 11.1-36
-Nouveau Testament et Psaumes en 1 an - Jour 40 - Romains 12.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 41 - Romains 13.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 42 - Romains 14.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 43 - Romains 15.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 44 - Romains 16.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 45 - 1 Corinthiens 1.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 46 - 1 Corinthiens 2.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 47 - 1 Corinthiens 3.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 48 - 1 Corinthiens 4.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 49 - 1 Corinthiens 5.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 50 - 1 Corinthiens 6.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 51 - 1 Corinthiens 7.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 52 - 1 Corinthiens 8.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 53 - 1 Corinthiens 9.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 54 - 1 Corinthiens 10.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 55 - 1 Corinthiens 11.1-34
-Nouveau Testament et Psaumes en 1 an - Jour 56 - 1 Corinthiens 12.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 57 - 1 Corinthiens 13.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 58 - 1 Corinthiens 14.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 59 - 1 Corinthiens 15.1-58
-Nouveau Testament et Psaumes en 1 an - Jour 60 - 1 Corinthiens 16.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 61 - 2 Corinthiens 1.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 62 - 2 Corinthiens 2.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 63 - 2 Corinthiens 3.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 64 - 2 Corinthiens 4.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 65 - 2 Corinthiens 5.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 66 - 2 Corinthiens 6.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 67 - 2 Corinthiens 7.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 68 - 2 Corinthiens 8.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 69 - 2 Corinthiens 9.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 70 - 2 Corinthiens 10.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 71 - 2 Corinthiens 11.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 72 - 2 Corinthiens 12.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 73 - 2 Corinthiens 13.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 74 - Galates 1.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 75 - Galates 2.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 76 - Galates 3.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 77 - Galates 4.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 78 - Galates 5.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 79 - Galates 6.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 80 - Ephésiens 1.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 81 - Ephésiens 2.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 82 - Ephésiens 3.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 83 - Ephésiens 4.1-32
-Nouveau Testament et Psaumes en 1 an - Jour 84 - Ephésiens 5.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 85 - Ephésiens 6.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 86 - Philippiens 1.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 87 - Philippiens 2.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 88 - Philippiens 3.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 89 - Philippiens 4.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 90 - Colossiens 1.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 91 - Colossiens 2.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 92 - Colossiens 3.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 93 - Colossiens 4.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 94 - 1 Thessaloniciens 1.1-10
-Nouveau Testament et Psaumes en 1 an - Jour 95 - 1 Thessaloniciens 2.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 96 - 1 Thessaloniciens 3.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 97 - 1 Thessaloniciens 4.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 98 - 1 Thessaloniciens 5.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 99 - 2 Thessaloniciens 1.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 100 - 2 Thessaloniciens 2.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 101 - 2 Thessaloniciens 3.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 102 - 1 Timothée 1.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 103 - 1 Timothée 2.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 104 - 1 Timothée 3.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 105 - 1 Timothée 4.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 106 - 1 Timothée 5.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 107 - 1 Timothée 6.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 108 - 2 Timothée 1.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 109 - 2 Timothée 2.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 110 - 2 Timothée 3.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 111 - 2 Timothée 4.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 112 - Tite 1.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 113 - Tite 2.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 114 - Tite 3.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 115 - Philémon 1.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 116 - Hébreux 1.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 117 - Hébreux 2.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 118 - Hébreux 3.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 119 - Hébreux 4.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 120 - Hébreux 5.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 121 - Hébreux 6.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 122 - Hébreux 7.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 123 - Hébreux 8.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 124 - Hébreux 9.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 125 - Hébreux 10.1-39
-Nouveau Testament et Psaumes en 1 an - Jour 126 - Hébreux 11.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 127 - Hébreux 12.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 128 - Hébreux 13.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 129 - Jacques 1.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 130 - Jacques 2.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 131 - Jacques 3.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 132 - Jacques 4.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 133 - Jacques 5.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 134 - 1 Pierre 1.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 135 - 1 Pierre 2.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 136 - 1 Pierre 3.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 137 - 1 Pierre 4.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 138 - 1 Pierre 5.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 139 - 2 Pierre 1.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 140 - 2 Pierre 2.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 141 - 2 Pierre 3.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 142 - 1 Jean 1.1-10
-Nouveau Testament et Psaumes en 1 an - Jour 143 - 1 Jean 2.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 144 - 1 Jean 3.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 145 - 1 Jean 4.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 146 - 1 Jean 5.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 147 - 2 Jean 1.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 148 - 3 Jean 1.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 149 - Jude 1.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 150 - Apocalypse 1.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 151 - Apocalypse 2.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 152 - Apocalypse 3.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 153 - Apocalypse 4.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 154 - Apocalypse 5.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 155 - Apocalypse 6.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 156 - Apocalypse 7.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 157 - Apocalypse 8.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 158 - Apocalypse 9.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 159 - Apocalypse 10.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 160 - Apocalypse 11.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 161 - Apocalypse 12.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 162 - Apocalypse 13.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 163 - Apocalypse 14.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 164 - Apocalypse 15.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 165 - Apocalypse 16.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 166 - Apocalypse 17.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 167 - Apocalypse 18.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 168 - Apocalypse 19.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 169 - Apocalypse 20.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 170 - Apocalypse 21.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 171 - Apocalypse 22.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 172 - Matthieu 1.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 173 - Matthieu 2.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 174 - Matthieu 3.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 175 - Matthieu 4.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 176 - Matthieu 5.1-48
-Nouveau Testament et Psaumes en 1 an - Jour 177 - Matthieu 6.1-34
-Nouveau Testament et Psaumes en 1 an - Jour 178 - Matthieu 7.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 179 - Matthieu 8.1-34
-Nouveau Testament et Psaumes en 1 an - Jour 180 - Matthieu 9.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 181 - Matthieu 10.1-42
-Nouveau Testament et Psaumes en 1 an - Jour 182 - Matthieu 11.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 183 - Matthieu 12.1-50
-Nouveau Testament et Psaumes en 1 an - Jour 184 - Matthieu 13.1-58
-Nouveau Testament et Psaumes en 1 an - Jour 185 - Matthieu 14.1-36
-Nouveau Testament et Psaumes en 1 an - Jour 186 - Matthieu 15.1-39
-Nouveau Testament et Psaumes en 1 an - Jour 187 - Matthieu 16.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 188 - Matthieu 17.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 189 - Matthieu 18.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 190 - Matthieu 19.1-30
-Nouveau Testament et Psaumes en 1 an - Jour 191 - Matthieu 20.1-34
-Nouveau Testament et Psaumes en 1 an - Jour 192 - Matthieu 21.1-46
-Nouveau Testament et Psaumes en 1 an - Jour 193 - Matthieu 22.1-46
-Nouveau Testament et Psaumes en 1 an - Jour 194 - Matthieu 23.1-39
-Nouveau Testament et Psaumes en 1 an - Jour 195 - Matthieu 24.1-51
-Nouveau Testament et Psaumes en 1 an - Jour 196 - Matthieu 25.1-46
-Nouveau Testament et Psaumes en 1 an - Jour 197 - Matthieu 26.1-75
-Nouveau Testament et Psaumes en 1 an - Jour 198 - Matthieu 27.1-66
-Nouveau Testament et Psaumes en 1 an - Jour 199 - Matthieu 28.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 200 - Marc 1.1-45
-Nouveau Testament et Psaumes en 1 an - Jour 201 - Marc 2.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 202 - Marc 3.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 203 - Marc 4.1-41
-Nouveau Testament et Psaumes en 1 an - Jour 204 - Marc 5.1-43
-Nouveau Testament et Psaumes en 1 an - Jour 205 - Marc 6.1-56
-Nouveau Testament et Psaumes en 1 an - Jour 206 - Marc 7.1-37
-Nouveau Testament et Psaumes en 1 an - Jour 207 - Marc 8.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 208 - Marc 9.1-50
-Nouveau Testament et Psaumes en 1 an - Jour 209 - Marc 10.1-52
-Nouveau Testament et Psaumes en 1 an - Jour 210 - Marc 11.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 211 - Marc 12.1-44
-Nouveau Testament et Psaumes en 1 an - Jour 212 - Marc 13.1-37
-Nouveau Testament et Psaumes en 1 an - Jour 213 - Marc 14.1-72
-Nouveau Testament et Psaumes en 1 an - Jour 214 - Marc 15.1-47
-Nouveau Testament et Psaumes en 1 an - Jour 215 - Marc 16.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 216 - Psaumes 1.1-6,Psaumes 2.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 217 - Psaumes 3.1-9,Psaumes 4.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 218 - Sophonie 1.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 219 - Psaumes 7.1-18,Psaumes 8.1-9
-Nouveau Testament et Psaumes en 1 an - Jour 220 - Psaumes 9.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 221 - Psaumes 10.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 222 - Psaumes 11.1-7,Psaumes 12.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 223 - Psaumes 13.1-6,Psaumes 14.1-7
-Nouveau Testament et Psaumes en 1 an - Jour 224 - Psaumes 15.1-5,Psaumes 16.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 225 - Psaumes 17.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 226 - Psaumes 18.1-50
-Nouveau Testament et Psaumes en 1 an - Jour 227 - Psaumes 19.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 228 - Psaumes 20.1-10,Psaumes 21.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 229 - Psaumes 22.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 230 - Psaumes 23.1-6,Psaumes 24.1-10
-Nouveau Testament et Psaumes en 1 an - Jour 231 - Psaumes 25.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 232 - Psaumes 26.1-12,Psaumes 27.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 233 - Psaumes 28.1-9,Psaumes 29.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 234 - Psaumes 30.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 235 - Psaumes 31.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 236 - Psaumes 32.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 237 - Psaumes 33.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 238 - Psaumes 34.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 239 - Psaumes 35.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 240 - Psaumes 36.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 241 - Psaumes 37.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 242 - Psaumes 38.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 243 - Psaumes 39.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 244 - Psaumes 40.1-18,Psaumes 41.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 245 - Psaumes 42.1-12,Psaumes 43.1-5
-Nouveau Testament et Psaumes en 1 an - Jour 246 - Psaumes 44.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 247 - Psaumes 45.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 248 - Psaumes 46.1-12,Psaumes 47.1-9
-Nouveau Testament et Psaumes en 1 an - Jour 249 - Psaumes 48.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 250 - Psaumes 49.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 251 - Psaumes 50.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 252 - Psaumes 51.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 253 - Psaumes 52.1-11,Psaumes 53.1-7,Psaumes 54.1-7
-Nouveau Testament et Psaumes en 1 an - Jour 254 - Psaumes 55.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 255 - Psaumes 56.1-14,Psaumes 57.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 256 - Psaumes 58.1-12,Psaumes 59.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 257 - Psaumes 60.1-14,Psaumes 61.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 258 - Psaumes 62.1-13,Psaumes 63.1-11
-Nouveau Testament et Psaumes en 1 an - Jour 259 - Psaumes 64.1-11,Psaumes 65.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 260 - Psaumes 66.1-20,Psaumes 67.1-7
-Nouveau Testament et Psaumes en 1 an - Jour 261 - Psaumes 68.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 262 - Psaumes 69.1-36
-Nouveau Testament et Psaumes en 1 an - Jour 263 - Psaumes 70.1-6,Psaumes 71.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 264 - Psaumes 72.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 265 - Psaumes 73.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 266 - Psaumes 74.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 267 - Psaumes 75.1-11,Psaumes 76.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 268 - Psaumes 77.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 269 - Psaumes 78.1-37
-Nouveau Testament et Psaumes en 1 an - Jour 270 - Psaumes 78.38-72
-Nouveau Testament et Psaumes en 1 an - Jour 271 - Psaumes 79.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 272 - Psaumes 80.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 273 - Psaumes 81.1-17,Psaumes 82.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 274 - Psaumes 83.1-19,Psaumes 84.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 275 - Psaumes 85.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 276 - Psaumes 86.1-17,Psaumes 87.1-7
-Nouveau Testament et Psaumes en 1 an - Jour 277 - Psaumes 88.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 278 - Psaumes 89.1-52
-Nouveau Testament et Psaumes en 1 an - Jour 279 - Psaumes 90.1-17
-Nouveau Testament et Psaumes en 1 an - Jour 280 - Psaumes 91.1-16
-Nouveau Testament et Psaumes en 1 an - Jour 281 - Psaumes 92.1-16,Psaumes 93.1-5
-Nouveau Testament et Psaumes en 1 an - Jour 282 - Psaumes 94.1-23
-Nouveau Testament et Psaumes en 1 an - Jour 283 - Psaumes 95.1-11,Psaumes 96.1-13
-Nouveau Testament et Psaumes en 1 an - Jour 284 - Psaumes 97.1-12,Psaumes 98.1-9
-Nouveau Testament et Psaumes en 1 an - Jour 285 - Psaumes 99.1-9,Psaumes 100.1-5,Psaumes 101.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 286 - Psaumes 102.1-28
-Nouveau Testament et Psaumes en 1 an - Jour 287 - Psaumes 103.1-22
-Nouveau Testament et Psaumes en 1 an - Jour 288 - Psaumes 104.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 289 - Psaumes 105.1-45
-Nouveau Testament et Psaumes en 1 an - Jour 290 - Psaumes 106.1-48
-Nouveau Testament et Psaumes en 1 an - Jour 291 - Psaumes 107.1-43
-Nouveau Testament et Psaumes en 1 an - Jour 292 - Psaumes 108.1-14,Psaumes 109.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 293 - Psaumes 110.1-7,Psaumes 111.1-10
-Nouveau Testament et Psaumes en 1 an - Jour 294 - Psaumes 112.1-10,Psaumes 113.1-9
-Nouveau Testament et Psaumes en 1 an - Jour 295 - Psaumes 114.1-8,Psaumes 115.1-18
-Nouveau Testament et Psaumes en 1 an - Jour 296 - Psaumes 116.1-19
-Nouveau Testament et Psaumes en 1 an - Jour 297 - Psaumes 117.1-2,Psaumes 118.1-29
-Nouveau Testament et Psaumes en 1 an - Jour 298 - Psaumes 119.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 299 - Psaumes 119.25-48
-Nouveau Testament et Psaumes en 1 an - Jour 300 - Psaumes 119.49-72
-Nouveau Testament et Psaumes en 1 an - Jour 301 - Psaumes 119.73-96
-Nouveau Testament et Psaumes en 1 an - Jour 302 - Psaumes 119.97-120
-Nouveau Testament et Psaumes en 1 an - Jour 303 - Psaumes 119.121-144
-Nouveau Testament et Psaumes en 1 an - Jour 304 - Psaumes 119.145-176
-Nouveau Testament et Psaumes en 1 an - Jour 305 - Psaumes 120.1-7,Psaumes 121.1-8,Psaumes 122.1-9
-Nouveau Testament et Psaumes en 1 an - Jour 306 - Psaumes 123.1-4,Psaumes 124.1-8,Psaumes 125.1-5
-Nouveau Testament et Psaumes en 1 an - Jour 307 - Psaumes 126.1-6,Psaumes 127.1-5,Psaumes 128.1-6
-Nouveau Testament et Psaumes en 1 an - Jour 308 - Psaumes 129.1-8,Psaumes 130.1-8,Psaumes 131.1-3
-Nouveau Testament et Psaumes en 1 an - Jour 309 - Psaumes 132.1-18,Psaumes 133.1-4,Psaumes 134.1-3
-Nouveau Testament et Psaumes en 1 an - Jour 310 - Psaumes 135.1-21,Psaumes 136.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 311 - Psaumes 137.1-9,Psaumes 138.1-8
-Nouveau Testament et Psaumes en 1 an - Jour 312 - Psaumes 139.1-24
-Nouveau Testament et Psaumes en 1 an - Jour 313 - Psaumes 140.1-14,Psaumes 141.1-10
-Nouveau Testament et Psaumes en 1 an - Jour 314 - Psaumes 142.1-8,Psaumes 143.1-12
-Nouveau Testament et Psaumes en 1 an - Jour 315 - Psaumes 144.1-15
-Nouveau Testament et Psaumes en 1 an - Jour 316 - Psaumes 145.1-21
-Nouveau Testament et Psaumes en 1 an - Jour 317 - Psaumes 146.1-10,Psaumes 147.1-20
-Nouveau Testament et Psaumes en 1 an - Jour 318 - Psaumes 148.1-14
-Nouveau Testament et Psaumes en 1 an - Jour 319 - Psaumes 149.1-9,Psaumes 150.1-6
-Nouveau Testament et Psaumes en 1 an - Jour 320 - Luc 1.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 321 - Luc 1.39-80
-Nouveau Testament et Psaumes en 1 an - Jour 322 - Luc 2.1-52
-Nouveau Testament et Psaumes en 1 an - Jour 323 - Luc 3.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 324 - Luc 4.1-44
-Nouveau Testament et Psaumes en 1 an - Jour 325 - Luc 5.1-39
-Nouveau Testament et Psaumes en 1 an - Jour 326 - Luc 6.1-49
-Nouveau Testament et Psaumes en 1 an - Jour 327 - Luc 7.1-50
-Nouveau Testament et Psaumes en 1 an - Jour 328 - Luc 8.1-56
-Nouveau Testament et Psaumes en 1 an - Jour 329 - Luc 9.1-62
-Nouveau Testament et Psaumes en 1 an - Jour 330 - Luc 10.1-42
-Nouveau Testament et Psaumes en 1 an - Jour 331 - Luc 11.1-54
-Nouveau Testament et Psaumes en 1 an - Jour 332 - Luc 12.1-59
-Nouveau Testament et Psaumes en 1 an - Jour 333 - Luc 13.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 334 - Luc 14.1-35
-Nouveau Testament et Psaumes en 1 an - Jour 335 - Luc 15.1-32
-Nouveau Testament et Psaumes en 1 an - Jour 336 - Luc 16.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 337 - Luc 17.1-37
-Nouveau Testament et Psaumes en 1 an - Jour 338 - Luc 18.1-43
-Nouveau Testament et Psaumes en 1 an - Jour 339 - Luc 19.1-48
-Nouveau Testament et Psaumes en 1 an - Jour 340 - Luc 20.1-47
-Nouveau Testament et Psaumes en 1 an - Jour 341 - Luc 21.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 342 - Luc 22.1-71
-Nouveau Testament et Psaumes en 1 an - Jour 343 - Luc 23.1-56
-Nouveau Testament et Psaumes en 1 an - Jour 344 - Luc 24.1-53
-Nouveau Testament et Psaumes en 1 an - Jour 345 - Jean 1.1-51
-Nouveau Testament et Psaumes en 1 an - Jour 346 - Jean 2.1-25
-Nouveau Testament et Psaumes en 1 an - Jour 347 - Jean 3.1-36
-Nouveau Testament et Psaumes en 1 an - Jour 348 - Jean 4.1-54
-Nouveau Testament et Psaumes en 1 an - Jour 349 - Jean 5.1-47
-Nouveau Testament et Psaumes en 1 an - Jour 350 - Jean 6.1-71
-Nouveau Testament et Psaumes en 1 an - Jour 351 - Jean 7.1-53
-Nouveau Testament et Psaumes en 1 an - Jour 352 - Jean 8.1-59
-Nouveau Testament et Psaumes en 1 an - Jour 353 - Jean 9.1-41
-Nouveau Testament et Psaumes en 1 an - Jour 354 - Jean 10.1-42
-Nouveau Testament et Psaumes en 1 an - Jour 355 - Jean 11.1-57
-Nouveau Testament et Psaumes en 1 an - Jour 356 - Jean 12.1-50
-Nouveau Testament et Psaumes en 1 an - Jour 357 - Jean 13.1-38
-Nouveau Testament et Psaumes en 1 an - Jour 358 - Jean 14.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 359 - Jean 15.1-27
-Nouveau Testament et Psaumes en 1 an - Jour 360 - Jean 16.1-33
-Nouveau Testament et Psaumes en 1 an - Jour 361 - Jean 17.1-26
-Nouveau Testament et Psaumes en 1 an - Jour 362 - Jean 18.1-40
-Nouveau Testament et Psaumes en 1 an - Jour 363 - Jean 19.1-42
-Nouveau Testament et Psaumes en 1 an - Jour 364 - Jean 20.1-31
-Nouveau Testament et Psaumes en 1 an - Jour 365 - Jean 21.1-25
-Jour 366 - Félicitations
-            `;
-
-            try {
-                readingPlan = parseReadingPlan(hardcodedPlan);
-
-                if (readingPlan.length > 0) {
-                    currentDayIndex = getDayOfYear() - 1;
-                    if (currentDayIndex < 0 || currentDayIndex >= readingPlan.length) {
-                        currentDayIndex = 0;
-                    }
-                    updateBiblePlanDisplay(); // Mettre à jour l'affichage initial du plan biblique
+                const calculatedDay = calculateNovenaDay(newDate);
+                if (calculatedDay > 0) {
+                    updateNovenaDisplay(selectedNovenaId, calculatedDay);
                 } else {
-                    currentDayText.textContent = "Aucun plan de lecture disponible.";
-                    currentReadingText.textContent = "";
-                    prevDayBtn.disabled = true;
-                    nextDayBtn.disabled = true;
-                    openReadingBtn.disabled = true;
+                    updateNovenaDisplay(selectedNovenaId, 1);
                 }
-            } catch (error) {
-                console.error("Erreur lors de l'initialisation du plan de lecture:", error);
-                currentDayText.textContent = "Erreur inattendue.";
-                currentReadingText.textContent = "";
-                prevDayBtn.disabled = true;
-                nextDayBtn.disabled = true;
-                openReadingBtn.disabled = true;
-            }
+            });
 
-            loadNovenasState(); // Charge l'état sauvegardé des neuvaines
-            populateNovenaDropdown(); // Remplit le menu déroulant des neuvaines
-            updateNovenasDisplay(); // Met à jour l'affichage de la section neuvaines
-        };
+            prevNovenaDayBtn.addEventListener('click', () => {
+                if (displayedNovenaDay > 1) {
+                    updateNovenaDisplay(selectedNovenaId, displayedNovenaDay - 1);
+                }
+            });
+
+            nextNovenaDayBtn.addEventListener('click', () => {
+                if (displayedNovenaDay < 9) {
+                    updateNovenaDisplay(selectedNovenaId, displayedNovenaDay + 1);
+                }
+            });
+
+            photoUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        novenaPhoto.src = e.target.result;
+                        saveNovenasState(); // Sauvegarder la photo
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            bougie.addEventListener('click', () => {
+                if (bougie.classList.contains('bougie-lit')) {
+                    bougie.src = "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/candle-unlit.png";
+                    bougie.classList.remove('bougie-lit');
+                } else {
+                    bougie.src = "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/candle-lit.png";
+                    bougie.classList.add('bougie-lit');
+                }
+                saveNovenasState();
+            });
+
+            saveDemandeBtn.addEventListener('click', () => {
+                saveNovenasState();
+                showMessage("Votre demande a été sauvegardée !");
+            });
+
+        });
     </script>
 </body>
 </html>
