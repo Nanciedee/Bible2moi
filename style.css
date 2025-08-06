@@ -1,44 +1,53 @@
+/* Styles de base pour un design moderne */
 body {
-    font-family: 'Georgia', serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     line-height: 1.6;
-    background-color: #f4f2e9;
-    color: #4b4b4b;
-    max-width: 800px;
+    background-color: #f0f2f5; /* Un gris très clair */
+    color: #333;
+    max-width: 900px; /* On augmente un peu la largeur */
     margin: 0 auto;
     padding: 20px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05); /* Ombre plus douce */
 }
 
+/* --- En-tête --- */
 header {
     text-align: center;
-    border-bottom: 2px solid #b3a49e;
-    padding-bottom: 10px;
+    border-bottom: none;
+    padding-bottom: 0;
     margin-bottom: 20px;
 }
 
 h1 {
-    color: #7b241c;
-    font-size: 2em;
+    color: #4a4e69; /* Un bleu-gris foncé */
+    font-size: 2.5em;
+    font-weight: 700;
 }
 
+/* --- Section de la neuvaine (images et demande) --- */
 .neuvaine-header {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
     margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
 .image-container {
     position: relative;
-    width: 200px;
-    height: 250px;
-    border: 2px dashed #b3a49e;
+    width: 250px;
+    height: 300px;
+    border: 3px solid #ccc; /* Bordure plus élégante */
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 10px;
 }
 
 .image-container img {
@@ -69,38 +78,69 @@ h1 {
 
 .demande-container {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 #demandeDuJour {
     width: 90%;
-    height: 80px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    height: 100px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     font-size: 1em;
-    margin-top: 10px;
+    margin-top: 15px;
+    resize: vertical;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 #saveDemande {
-    background-color: #7b241c;
+    background-color: #52b788; /* Un vert apaisant */
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 25px;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
+#saveDemande:hover {
+    background-color: #40916c;
+}
+
+/* --- Blocs de prières --- */
 .prieur-block {
     background-color: #fff;
-    border-left: 5px solid #7b241c;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    border-left: 6px solid #4a4e69;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
 }
 
 .prieur-block h2 {
-    color: #7b241c;
+    color: #4a4e69;
     margin-top: 0;
+    font-size: 1.5em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.prieur-block p {
+    color: #555;
+}
+
+/* --- Responsive pour les petits écrans --- */
+@media (max-width: 600px) {
+    .neuvaine-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .image-container {
+        width: 100%;
+        height: auto;
+    }
 }
