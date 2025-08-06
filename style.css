@@ -1,0 +1,106 @@
+body {
+    font-family: 'Georgia', serif;
+    line-height: 1.6;
+    background-color: #f4f2e9;
+    color: #4b4b4b;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+header {
+    text-align: center;
+    border-bottom: 2px solid #b3a49e;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #7b241c;
+    font-size: 2em;
+}
+
+.neuvaine-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.image-container {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    border: 2px dashed #b3a49e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#photoUpload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#bougie {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.bougie-unlit {
+    filter: grayscale(100%);
+}
+
+.demande-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#demandeDuJour {
+    width: 90%;
+    height: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+#saveDemande {
+    background-color: #7b241c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.prieur-block {
+    background-color: #fff;
+    border-left: 5px solid #7b241c;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+.prieur-block h2 {
+    color: #7b241c;
+    margin-top: 0;
+}

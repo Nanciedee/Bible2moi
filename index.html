@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Neuvaine à Saint Michel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Neuvaine à Saint Michel et aux neuf chœurs des Anges</h1>
+        <p>Cette neuvaine peut-être faite du 21 au 29 septembre (fête des Archanges).</p>
+    </header>
+
+    <main>
+        <div class="neuvaine-header">
+            <div class="image-container">
+                <input type="file" id="photoUpload" accept="image/*">
+                <img id="neuvaine-photo" src="#" alt="Votre photo de neuvaine" style="display:none;">
+            </div>
+            <div class="image-container">
+                <img id="bougie" src="candle-unlit.png" alt="Une bougie" class="bougie-unlit">
+            </div>
+        </div>
+
+        <div class="demande-container">
+            <label for="demandeDuJour">Formulez votre demande du jour :</label>
+            <textarea id="demandeDuJour" placeholder="Votre demande..."></textarea>
+            <button id="saveDemande">Sauvegarder ma demande</button>
+        </div>
+
+        <div class="prieres-container">
+            <div id="prieres-generales">
+                <div class="prieur-block" id="confiteor">
+                    <h2>Confiteor</h2>
+                    <p>Je confesse à Dieu tout-puissant, je reconnais devant mes frères, que j’ai péché en pensée, en parole, par action et par omission; oui, j’ai vraiment péché. C’est pourquoi je supplie la Vierge Marie, les anges et tous les saints, et vous aussi, mes frères, de prier pour moi le Seigneur notre Dieu. Que Dieu tout-puissant nous fasse miséricorde; qu’il nous pardonne nos péchés et nous conduise à la vie éternelle. Amen.</p>
+                </div>
+                
+                <div class="prieur-block" id="priere-st-michel">
+                    <h2>Prière à saint Michel</h2>
+                    <p>“Saint Michel Archange, rempli de la sagesse de Dieu, fort dans le combat, viens à mon aide, soutiens-moi dans les difficultés, les épreuves, quand je souffre, quand je doute, quand je pleure. Obtiens-moi le courage, la force, la volonté, pour ne pas me laisser abattre. Saint Michel Archange, sois mon défenseur et protecteur contre les forces du Mal. Me confiant en l’intercession de votre Bienheureux Archange Saint Michel, je vous supplie, Seigneur Père, Fils et Saint-Esprit, de m’accorder la grâce… <span class="demande-placeholder">(formuler votre demande)</span>”</p>
+                </div>
+            </div>
+
+            <div id="priere-du-jour">
+                </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
