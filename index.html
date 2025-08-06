@@ -3,169 +3,916 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Neuvaine à Saint Michel</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mon Plan de Lecture Biblique et Mes Neuvaines</title>
+    <!-- Chargement de Tailwind CSS pour un style moderne et réactif -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chargement des polices Merriweather (pour le corps) et Inter (pour l'interface) -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Styles de base pour le corps de la page avec la police Merriweather */
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #f3f4f6; /* Couleur de fond gris clair (sera remplacée par le dégradé Tailwind) */
+        }
+        /* Styles personnalisés pour la barre de défilement afin d'améliorer l'esthétique */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0e0e0; /* Fond de la piste de défilement */
+            border-radius: 10px; /* Bords arrondis pour la piste */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a0a0a0; /* Couleur du pouce de défilement */
+            border-radius: 10px; /* Bords arrondis pour le pouce */
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #808080; /* Couleur du pouce au survol */
+        }
+        /* Appliquer la police Inter aux boutons spécifiquement pour une meilleure lisibilité UI */
+        button {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body>
+<body class="flex flex-col items-center min-h-screen p-4 bg-gradient-to-br from-blue-100 to-indigo-200">
+    <!-- Section Plan de Lecture Biblique (sa propre carte) -->
+    <div id="bible-plan-section" class="bg-white rounded-xl shadow-xl p-6 sm:p-8 md:p-10 max-w-2xl w-full flex flex-col items-center mb-6">
+        <!-- Titre principal de l'application - déplacé à l'intérieur de la carte -->
+        <h1 class="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6 text-center">Mon Plan de Lecture Biblique</h1>
 
-    <header>
-        <h1>Neuvaine à Saint Michel et aux neuf chœurs des Anges</h1>
-        <p>Cette neuvaine peut-être faite du 21 au 29 septembre (fête des Archanges).</p>
-    </header>
-
-    <main>
-        <div class="neuvaine-header">
-            <div class="image-container">
-                <input type="file" id="photoUpload" accept="image/*">
-                <img id="neuvaine-photo" src="#" alt="Votre photo de neuvaine" style="display:none;">
-            </div>
-            <div class="image-container">
-                <img id="bougie" src="candle-unlit.png" alt="Une bougie" class="bougie-unlit">
-            </div>
+        <div class="w-full text-center">
+            <p class="text-lg sm:text-xl text-blue-700 mb-4" id="current-day-text">Jour X</p>
+            <p class="text-xl italic text-blue-900 mb-6" id="current-reading-text">Chargement...</p>
         </div>
 
-        <div class="demande-container">
-            <label for="demandeDuJour">Formulez votre demande du jour :</label>
-            <textarea id="demandeDuJour" placeholder="Votre demande..."></textarea>
-            <button id="saveDemande">Sauvegarder ma demande</button>
+        <!-- Boutons de navigation pour le plan biblique -->
+        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center mb-6">
+            <button id="prev-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 flex items-center justify-center">
+                Jour Précédent <span id="prev-date" class="ml-2 text-sm opacity-80"></span>
+            </button>
+            <button id="next-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 flex items-center justify-center">
+                Jour Suivant <span id="next-date" class="ml-2 text-sm opacity-80"></span>
+            </button>
         </div>
 
-        <nav class="navigation-links">
-            <a href="#confiteor">Confiteor & Prière à Saint Michel</a>
-            <a href="#chapelet">Chapelet de Saint Michel</a>
-            <a href="#prieres-quotidiennes">Prière Quotidienne</a>
-        </nav>
+        <!-- Bouton pour ouvrir la lecture externe -->
+        <button id="open-reading-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75 w-full sm:w-auto mb-6">
+            Lire le Texte sur BibleGateway
+        </button>
+    </div>
 
-        <div class="prieres-container">
-            <div id="prieres-generales">
-                <div class="prieur-block" id="confiteor">
-                    <h2>Confiteor</h2>
-                    <p>Je confesse à Dieu tout-puissant, je reconnais devant mes frères, que j’ai péché en pensée, en parole, par action et par omission; oui, j’ai vraiment péché. C’est pourquoi je supplie la Vierge Marie, les anges et tous les saints, et vous aussi, mes frères, de prier pour moi le Seigneur notre Dieu. Que Dieu tout-puissant nous fasse miséricorde; qu’il nous pardonne nos péchés et nous conduise à la vie éternelle. Amen.</p>
-                </div>
+    <!-- Section pour le texte biblique (expliquant la limitation CORS) - Toujours en bas du plan de lecture -->
+    <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-center text-blue-700 w-full max-w-2xl mb-6">
+        <p class="text-xs">
+            Pour des raisons de sécurité du navigateur (CORS), le texte biblique ne peut pas être affiché directement ici.
+            Cliquez sur le bouton ci-dessus pour ouvrir le passage sur BibleGateway.com dans un nouvel onglet.
+        </p>
+    </div>
 
-                <div class="prieur-block" id="priere-st-michel">
-                    <h2>Prière à saint Michel</h2>
-                    <p>“Saint Michel Archange, rempli de la sagesse de Dieu, fort dans le combat, viens à mon aide, soutiens-moi dans les difficultés, les épreuves, quand je souffre, quand je doute, quand je pleure. Obtiens-moi le courage, la force, la volonté, pour ne pas me laisser abattre. Saint Michel Archange, sois mon défenseur et protecteur contre les forces du Mal. Me confiant en l’intercession de votre Bienheureux Archange Saint Michel, je vous supplie, Seigneur Père, Fils et Saint-Esprit, de m’accorder la grâce… <span class="demande-placeholder">(formuler votre demande)</span>”</p>
-                </div>
-            </div>
+    <!-- Nouvelle Section Neuvaines (son propre carré, totalement séparé) -->
+    <div id="novenas-standalone-section" class="bg-white rounded-xl shadow-xl p-6 sm:p-8 md:p-10 max-w-2xl w-full flex flex-col items-center mb-6">
+        <h2 class="text-3xl sm:text-4xl font-bold text-indigo-900 mb-6 text-center">Mes Neuvaines</h2>
 
-            <div class="prieur-block" id="chapelet">
-                <h2>Prière du Chapelet de saint Michel Archange</h2>
-                <p>Au nom du Père et du Fils et du Saint Esprit<br>
-                Acte de Contrition<br>
-                On baise la médaille de Saint Michel, en disant :<br>
-                – Dieu, viens à mon aide.<br>
-                – Seigneur, à notre secours !<br>
-                Gloire au Père et au Fils et au Saint Esprit, comme il était au commencement, maintenant et toujours, pour les siècles des siècles. Amen.</p>
-                <p>1 – Salutation au 1er Choeur des Anges<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur Céleste des Séraphins, que le Seigneur nous rende dignes d’être enflammés d’une parfaite charité.<br>
-                Amen.<br>
-                Choeur Céleste des Séraphins, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins, soyez à nos côtés, venez à notre secours.</p>
-                <p>2 – Salutation au 2ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue<br>
-                Par l’intercession de saint Michel et du Choeur Céleste des Chérubins, que le Seigneur nous fasse la grâce d’abandonner la voie du péché et de courir dans celle de la perfection chrétienne. Amen.<br>
-                Choeur Céleste des Chérubins, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins, soyez à nos côtés, venez à notre secours.</p>
-                <p>3 – Salutation au 3ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur Céleste des Trônes, que le Seigneur répande dans nos coeurs l’esprit d’une véritable et sincère humilité. Amen.<br>
-                Choeur Céleste des Trônes, venez à notre secours. (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes, soyez à nos côtés, venez à notre secours.</p>
-                <p>4 – Salutation au 4ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur céleste des Dominations, que le Seigneur nous fasse la grâce de dominer nos sens et de nous corriger de nos mauvaises passions.<br>
-                Amen.<br>
-                Choeur Céleste des Dominations, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations, soyez à nos côtés, venez à notre secours.</p>
-                <p>5 – Salutation au 5ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur Céleste des Puissances, que le Seigneur daigne protéger nos âmes contre les embûches et les tentations du démon. Amen.<br>
-                Choeur Céleste des Puissances, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations,<br>
-                Choeur Céleste des Puissances, soyez à nos côtés, venez à notre secours.</p>
-                <p>6 – Salutation au 6ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur Admirable des Vertus Célestes, que le Seigneur ne nous laisse pas succomber à la tentation, mais qu’il nous délivre du mal. Amen.<br>
-                Choeur Admirable des Vertus Célestes, venez à notre secours (trois fois).<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations,<br>
-                Choeur Céleste des Puissances,<br>
-                Choeur Admirable des Vertus Célestes, soyez à nos côtés, venez à notre secours.</p>
-                <p>7 – Salutation au 7ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue »<br>
-                Par l’intercession de saint Michel et du Choeur céleste des Principautés, que le Seigneur remplisse nos âmes de l’esprit d’une véritable et sincère obéissance. Amen.<br>
-                Choeur Céleste des Principautés, venez à notre secours (trois fois).<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations,<br>
-                Choeur Céleste des Puissances,<br>
-                Choeur Admirable des Vertus Célestes,<br>
-                Choeur Céleste des Principautés, soyez à nos côtés, venez à notre secours.</p>
-                <p>8 – Salutation au 8ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue »<br>
-                Par l’intercession de saint Michel et du Choeur Céleste des Archanges, que le Seigneur nous accorde le don de la Persévérance dans la foi et dans les bonnes oeuvres, pour pouvoir arriver à la possession de la gloire du Paradis. Amen.<br>
-                Choeur Céleste des Archanges, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations,<br>
-                Choeur Céleste des Puissances,<br>
-                Choeur Admirable des Vertus Célestes,<br>
-                Choeur Céleste des Principautés,<br>
-                Choeur Céleste des Archanges, soyez à nos côtés, venez à notre secours.</p>
-                <p>9 – Salutation au 9ème Choeur des Anges.<br>
-                Un « Notre Père », Trois « Je vous salue»<br>
-                Par l’intercession de saint Michel et du Choeur Céleste de tous les Anges, que le Seigneur daigne nous accorder d’être gardés par eux pendant cette vie mortelle, pour être conduits ensuite à la gloire éternelle du ciel. Amen.<br>
-                Choeur Céleste de tous les anges, venez à notre secours (trois fois)<br>
-                Choeur Céleste des Séraphins,<br>
-                Choeur Céleste des Chérubins<br>
-                Choeur Céleste des Trônes,<br>
-                Choeur Céleste des Dominations,<br>
-                Choeur Céleste des Puissances,<br>
-                Choeur Admirable des Vertus Célestes,<br>
-                Choeur Céleste des Principautés,<br>
-                Choeur Céleste des Archanges,<br>
-                Choeur Céleste de tous les anges, soyez à nos côtés, venez à notre secours.<br>
-                En l’honneur de l’Archange St Michel :<br>
-                Notre Père<br>
-                En l’honneur de l’Archange St Gabriel:<br>
-                Notre Père<br>
-                En l’honneur de l’Archange St Raphaël : Notre Père<br>
-                En l’honneur de mon Ange Gardien :<br>
-                Notre Père<br>
-                (Si on est en groupe, on dira)<br>
-                En l’honneur de l’Ange Gardien de chacun de nous : Notre Père…<br>
-                Très glorieux saint Michel, chef et prince des armées célestes, gardien fidèle des âmes, vainqueur des esprits rebelles, gardien de la maison de Dieu, notre admirable guide après Jésus-Christ, vous dont l’excellence et la vertu sont magnifiques : daignez nous délivrer de tous les maux, nous tous qui recourons à vous avec confiance et faites, par votre incomparable protection, que nous avancions chaque jour dans la fidélité à servir Dieu.<br>
-                – Priez pour nous, ô bienheureux saint Michel, Prince de l’Eglise de Jésus-Christ, afin que nous puissions être dignes de ses promesses.<br>
-                Prions : Dieu tout puissant et éternel qui, par un prodige de bonté et de miséricorde pour le salut commun des hommes, avez choisi pour prince de votre Eglise le très glorieux Archange saint Michel ; rendez-nous dignes, nous vous en prions, d’être délivrés, par sa bienveillante protection de tous nos ennemis, afin qu’à notre mort aucun d’eux ne puisse nous inquiéter, mais qu’il nous soit donné d’être introduits par lui en présence de Votre Puissante et Auguste Majesté. Par les mérites de Jésus-Christ Notre Seigneur. Amen.<br>
-                Invocation : – St Michel Archange<br>
-                – Défendez-nous dans le combat !<br>
-                Imprimatur : Mgr. Charles Benoit – Vicaire Général<br>
-                Archidiocèse de Port-au-Prince – 1er Avril 2003<br>
-                Que saint Michel Archange nous bénisse !</p>
-            </div>
-
-            <div id="prieres-quotidiennes">
-                <h2 id="prieres-quotidiennes-title">Prière Quotidienne</h2>
-                </div>
+        <!-- Sélecteur de Neuvaine -->
+        <div class="mb-4 w-full flex flex-col sm:flex-row items-center justify-center gap-2">
+            <label for="novena-select" class="text-lg text-gray-700 font-semibold">Choisir une Neuvaine:</label>
+            <select id="novena-select" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <!-- Options seront remplies par JavaScript -->
+            </select>
         </div>
-    </main>
 
-    <script src="script.js"></script>
+        <!-- Sélecteur de Date de Début -->
+        <div class="mb-6 w-full flex flex-col sm:flex-row items-center justify-center gap-2">
+            <label for="novena-start-date" class="text-lg text-gray-700 font-semibold">Date de Début:</label>
+            <input type="date" id="novena-start-date" class="p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400" disabled>
+        </div>
+
+        <p class="text-lg italic text-blue-900 mb-6 text-center" id="novenas-content-placeholder">
+            Aucune neuvaine sélectionnée. Veuillez utiliser les boutons ci-dessous pour choisir une neuvaine et un jour.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+            <button id="prev-novena-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" disabled>
+                Jour Précédent
+            </button>
+            <button id="choose-day-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75" disabled>
+                Choisir le Jour
+            </button>
+            <button id="next-novena-day-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" disabled>
+                Jour Suivant
+            </button>
+        </div>
+    </div>
+
+    <!-- Boîte de message temporaire (pour les notifications comme "copié!") -->
+    <div id="message-box" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-5 py-3 rounded-lg shadow-xl hidden transition-opacity duration-300 ease-out opacity-0">
+        Message
+    </div>
+
+    <script>
+        // Tableau pour stocker le plan de lecture analysé
+        let readingPlan = [];
+        // Index du jour actuel dans le tableau (0-indexé)
+        let currentDayIndex = 0;
+
+        // Références aux éléments du DOM pour le plan biblique
+        const biblePlanSection = document.getElementById('bible-plan-section');
+        const currentDayText = document.getElementById('current-day-text');
+        const currentReadingText = document.getElementById('current-reading-text');
+        const prevDayBtn = document.getElementById('prev-day-btn');
+        const nextDayBtn = document.getElementById('next-day-btn');
+        const openReadingBtn = document.getElementById('open-reading-btn');
+        const messageBox = document.getElementById('message-box');
+        const prevDateSpan = document.getElementById('prev-date');
+        const nextDateSpan = document.getElementById('next-date');
+
+        // Références aux éléments du DOM pour la nouvelle section Neuvaines
+        const novenasStandaloneSection = document.getElementById('novenas-standalone-section');
+        const novenasContentPlaceholder = document.getElementById('novenas-content-placeholder');
+        const chooseNovenaBtn = document.getElementById('choose-novena-btn'); // This button is now mostly for visual grouping, logic is on select/date/day
+        const chooseDayBtn = document.getElementById('choose-day-btn');
+        const novenaSelect = document.getElementById('novena-select');
+        const novenaStartDateInput = document.getElementById('novena-start-date');
+        const prevNovenaDayBtn = document.getElementById('prev-novena-day-btn');
+        const nextNovenaDayBtn = document.getElementById('next-novena-day-btn');
+        const novenaTitle = document.querySelector('#novenas-standalone-section h2'); // Get the h2 inside the novenas section
+
+        // Données des neuvaines
+        const novenasDefinitions = [
+            {
+                id: "st_michel",
+                name: "Neuvaine à Saint Michel Archange",
+                days: [
+                    { day: 1, title: "Jour 1: Prière pour la foi", text: "Ô Glorieux Prince des Milices Célestes, Saint Michel Archange, défendez-nous dans le combat contre les principautés et les puissances, contre les dominateurs de ce monde de ténèbres, contre les esprits de malice répandus dans les airs. Venez en aide aux hommes que Dieu a faits à son image et à sa ressemblance, et rachetés à si grand prix de la tyrannie du diable. Amen." },
+                    { day: 2, title: "Jour 2: Prière pour l'espérance", text: "Saint Michel Archange, vous qui êtes le gardien de l'Église, protégez-la de toutes les attaques de l'ennemi. Inspirez-nous l'espérance en la victoire finale du Christ, et aidez-nous à rester fermes dans la foi. Amen." },
+                    { day: 3, title: "Jour 3: Prière pour la charité", text: "Archange de la charité divine, Saint Michel, enflammez nos cœurs de l'amour de Dieu et du prochain. Apprenez-nous à servir avec humilité et dévouement, et à aimer comme le Christ nous a aimés. Amen." },
+                    { day: 4, title: "Jour 4: Prière pour la pureté", text: "Purificateur des âmes, Saint Michel, obtenez-nous la grâce de la pureté du cœur et de l'esprit. Délivrez-nous de toute impureté et aidez-nous à vivre selon la volonté de Dieu. Amen." },
+                    { day: 5, title: "Jour 5: Prière pour la persévérance", text: "Saint Michel, modèle de persévérance, fortifiez-nous dans les épreuves et les tentations. Aidez-nous à ne jamais nous décourager et à toujours chercher à faire la volonté de Dieu. Amen." },
+                    { day: 6, title: "Jour 6: Prière pour la sagesse", text: "Archange de la sagesse divine, Saint Michel, éclairez notre intelligence et notre cœur. Accordez-nous la sagesse qui vient d'en haut pour discerner le bien et le mal. Amen." },
+                    { day: 7, title: "Jour 7: Prière pour la protection", text: "Protecteur céleste, Saint Michel, veillez sur nous jour et nuit. Éloignez de nous tout danger, visible et invisible, et conduisez-nous sur le chemin du salut. Amen." },
+                    { day: 8, title: "Jour 8: Prière pour la guérison", text: "Saint Michel, guérisseur des âmes et des corps, intercédez pour nous auprès du Seigneur. Obtenez-nous la guérison de nos maladies et la consolation dans nos souffrances. Amen." },
+                    { day: 9, title: "Jour 9: Prière pour la paix", text: "Prince de la Paix, Saint Michel, établissez la paix dans nos cœurs, dans nos familles et dans le monde entier. Que votre présence nous apporte la sérénité et la joie. Amen." }
+                ]
+            },
+            {
+                id: "sainte_marie",
+                name: "Neuvaine à la Sainte Vierge Marie",
+                days: [
+                    { day: 1, title: "Jour 1: Prière pour l'humilité", text: "Ô Marie, Mère de Dieu et notre Mère, vous qui avez été humble et obéissante, obtenez-nous la grâce de l'humilité afin que nous puissions servir Dieu avec un cœur pur. Amen." },
+                    { day: 2, title: "Jour 2: Prière pour la pureté", text: "Vierge très pure, modèle de chasteté, aidez-nous à garder nos cœurs et nos corps purs, et à vivre dans la sainteté. Amen." },
+                    { day: 3, title: "Jour 3: Prière pour la charité", text: "Mère de l'amour divin, Marie, enflammez nos cœurs de l'amour de Dieu et du prochain, afin que nous puissions aimer comme le Christ nous a aimés. Amen." },
+                    { day: 4, title: "Jour 4: Prière pour la patience", text: "Ô Marie, vous qui avez supporté tant de souffrances avec patience, obtenez-nous la force de supporter nos épreuves avec résignation et confiance en Dieu. Amen." },
+                    { day: 5, title: "Jour 5: Prière pour la foi", text: "Mère de la foi, Marie, fortifiez notre foi en Dieu et en ses promesses. Aidez-nous à croire sans douter, même dans les moments difficiles. Amen." },
+                    { day: 6, title: "Jour 6: Prière pour l'espérance", text: "Mère de l'espérance, Marie, inspirez-nous une ferme espérance en la miséricorde de Dieu et en la vie éternelle. Amen." },
+                    { day: 7, title: "Jour 7: Prière pour l'obéissance", text: "Vierge obéissante, vous qui avez toujours fait la volonté de Dieu, aidez-nous à être obéissants à la voix de Dieu et à l'enseignement de l'Église. Amen." },
+                    { day: 8, title: "Jour 8: Prière pour la persévérance", text: "Mère de la persévérance, Marie, obtenez-nous la grâce de persévérer dans la prière et dans le bien jusqu'à la fin de nos jours. Amen." },
+                    { day: 9, title: "Jour 9: Prière pour la paix", text: "Reine de la paix, Marie, priez pour nous et pour le monde entier afin que la paix du Christ règne dans les cœurs et dans les nations. Amen." }
+                ]
+            },
+            {
+                id: "st_joseph",
+                name: "Neuvaine à Saint Joseph",
+                days: [
+                    { day: 1, title: "Jour 1: Saint Joseph, homme juste", text: "Ô Saint Joseph, homme juste et fidèle, modèle de toutes les vertus, nous vous prions de nous obtenir la grâce de vivre dans la justice et la sainteté, en conformité avec la volonté de Dieu. Amen." },
+                    { day: 2, title: "Jour 2: Saint Joseph, père nourricier de Jésus", text: "Saint Joseph, vous qui avez veillé sur Jésus avec un amour paternel, protégez nos familles et aidez-nous à élever nos enfants dans la foi et l'amour de Dieu. Amen." },
+                    { day: 3, title: "Jour 3: Saint Joseph, époux de la Vierge Marie", text: "Ô Saint Joseph, époux chaste et pur de la Vierge Marie, obtenez-nous la grâce de la pureté du cœur et de l'esprit, et de vivre dans la fidélité à nos engagements. Amen." },
+                    { day: 4, title: "Jour 4: Saint Joseph, modèle des travailleurs", text: "Saint Joseph, travailleur humble et diligent, inspirez-nous l'amour du travail et la persévérance dans nos efforts. Aidez-nous à offrir notre travail à Dieu pour sa gloire. Amen." },
+                    { day: 5, title: "Jour 5: Saint Joseph, protecteur de l'Église", text: "Ô Saint Joseph, protecteur de l'Église universelle, veillez sur elle et défendez-la contre toutes les attaques de l'ennemi. Priez pour nos pasteurs et pour tous les fidèles. Amen." },
+                    { day: 6, title: "Jour 6: Saint Joseph, espoir des malades", text: "Saint Joseph, vous qui avez connu la souffrance, soyez l'espoir des malades et des affligés. Obtenez-leur la guérison et la consolation dans leurs épreuves. Amen." },
+                    { day: 7, title: "Jour 7: Saint Joseph, patron de la bonne mort", text: "Ô Saint Joseph, patron de la bonne mort, assistez-nous à l'heure de notre mort et obtenez-nous la grâce d'une mort sainte et paisible. Amen." },
+                    { day: 8, title: "Jour 8: Saint Joseph, terreur des démons", text: "Saint Joseph, terreur des démons, protégez-nous des pièges de l'ennemi et de toutes les tentations. Soyez notre bouclier dans le combat spirituel. Amen." },
+                    { day: 9, title: "Jour 9: Saint Joseph, consolateur des affligés", text: "Ô Saint Joseph, consolateur des affligés, soyez notre refuge dans la détresse. Essuyez nos larmes et obtenez-nous la paix et la joie du Seigneur. Amen." }
+                ]
+            }
+        ];
+
+        let userNovenasState = {}; // Stores start dates for each novena: { "st_michel": "YYYY-MM-DD", "sainte_marie": "YYYY-MM-DD" }
+        let selectedNovenaId = ""; // Stores the ID of the currently selected novena in the dropdown
+        let displayedNovenaDay = 0; // The day currently displayed in the novena section (1-9)
+
+        /**
+         * Affiche un message temporaire à l'écran.
+         * @param {string} message - Le texte du message à afficher.
+         * @param {number} duration - La durée d'affichage du message en millisecondes (par défaut 3000ms).
+         */
+        function showMessage(message, duration = 3000) {
+            messageBox.textContent = message;
+            messageBox.classList.remove('hidden', 'opacity-0');
+            messageBox.classList.add('opacity-100');
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100');
+                messageBox.classList.add('opacity-0');
+                setTimeout(() => {
+                    messageBox.classList.add('hidden');
+                }, 300); // Laisse le temps à la transition de s'exécuter
+            }, duration);
+        }
+
+        /**
+         * Analyse le texte brut du plan de lecture et le convertit en un tableau d'objets.
+         * Chaque objet contient le numéro du jour, la référence de la lecture, et l'URL BibleGateway.
+         * @param {string} rawText - Le texte brut du plan de lecture.
+         * @returns {Array<Object>} Un tableau d'objets { day: number, reading: string, bibleGatewayUrl: string }.
+         */
+        function parseReadingPlan(rawText) {
+            const lines = rawText.split('\n');
+            const parsedPlan = [];
+            let dayCounter = 0;
+
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                // Expression régulière pour extraire "Jour X - Référence de lecture"
+                const match = trimmedLine.match(/Jour (\d+) - (.+)/);
+                if (match) {
+                    const dayNum = parseInt(match[1], 10);
+                    const reading = match[2];
+
+                    // Vérifie que les jours sont séquentiels avant d'ajouter au plan
+                    if (dayNum === dayCounter + 1) {
+                        // Construire l'URL pour BibleGateway
+                        // Remplacer les virgules par des points-virgules pour BibleGateway et encoder l'URL
+                        const encodedReading = encodeURIComponent(reading.replace(/,/g, '; '));
+                        // Mise à jour de la version de la Bible vers NEG1979
+                        const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodedReading}&version=NEG1979`;
+
+                        parsedPlan.push({
+                            day: dayNum,
+                            reading: reading,
+                            bibleGatewayUrl: bibleGatewayUrl
+                        });
+                        dayCounter++;
+                    }
+                }
+            });
+            return parsedPlan;
+        }
+
+        /**
+         * Calcule le jour de l'année actuel (1 pour le 1er janvier, etc.).
+         * @returns {number} Le numéro du jour dans l'année.
+         */
+        function getDayOfYear() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0); // Début de l'année
+            // Calcule la différence en millisecondes et ajuste pour le décalage horaire
+            const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+            const oneDay = 1000 * 60 * 60 * 24; // Millisecondes dans un jour
+            return Math.floor(diff / oneDay);
+        }
+
+        /**
+         * Obtient la date réelle pour un décalage de jour donné par rapport au jour actuel de l'année.
+         * @param {number} dayOffset - Le décalage en jours (ex: -1 pour le jour précédent, 1 pour le jour suivant).
+         * @returns {string} La date formatée (ex: "01 Jan").
+         */
+        function getRealDate(dayOffset) {
+            const today = new Date();
+            const targetDate = new Date(today);
+            targetDate.setDate(today.getDate() + dayOffset);
+
+            const options = { day: '2-digit', month: 'short' };
+            return targetDate.toLocaleDateString('fr-FR', options);
+        }
+
+        /**
+         * Met à jour l'affichage avec la lecture du jour actuel.
+         */
+        function updateBiblePlanDisplay() {
+            if (readingPlan.length === 0) {
+                currentDayText.textContent = "Aucun plan de lecture disponible.";
+                currentReadingText.textContent = "";
+                prevDayBtn.disabled = true;
+                nextDayBtn.disabled = true;
+                openReadingBtn.disabled = true;
+                prevDateSpan.textContent = "";
+                nextDateSpan.textContent = "";
+                return;
+            }
+
+            // S'assure que l'index du jour est dans les limites du tableau
+            if (currentDayIndex < 0) {
+                currentDayIndex = 0;
+            } else if (currentDayIndex >= readingPlan.length) {
+                currentDayIndex = readingPlan.length - 1;
+            }
+
+            const currentEntry = readingPlan[currentDayIndex];
+            currentDayText.textContent = `Jour ${currentEntry.day}`;
+            currentReadingText.textContent = currentEntry.reading;
+
+            // Active/désactive les boutons de navigation en fonction de l'index
+            prevDayBtn.disabled = currentDayIndex === 0;
+            nextDayBtn.disabled = currentDayIndex === readingPlan.length - 1;
+            openReadingBtn.disabled = false;
+
+            // Met à jour les dates réelles pour les boutons de navigation
+            if (currentDayIndex > 0) {
+                prevDateSpan.textContent = `(${getRealDate(currentDayIndex - getDayOfYear())})`;
+            } else {
+                prevDateSpan.textContent = "";
+            }
+
+            if (currentDayIndex < readingPlan.length - 1) {
+                nextDateSpan.textContent = `(${getRealDate(currentDayIndex + 1 - getDayOfYear())})`;
+            } else {
+                nextDateSpan.textContent = "";
+            }
+
+            // Met à jour l'URL du bouton "Lire le Texte"
+            openReadingBtn.onclick = () => {
+                window.open(currentEntry.bibleGatewayUrl, '_blank');
+            };
+        }
+
+        /**
+         * Sauvegarde l'état des neuvaines dans le stockage local.
+         */
+        function saveNovenasState() {
+            localStorage.setItem('userNovenasState', JSON.stringify(userNovenasState));
+            localStorage.setItem('selectedNovenaId', selectedNovenaId);
+        }
+
+        /**
+         * Charge l'état des neuvaines depuis le stockage local.
+         */
+        function loadNovenasState() {
+            const savedState = localStorage.getItem('userNovenasState');
+            if (savedState) {
+                userNovenasState = JSON.parse(savedState);
+            }
+            const savedSelectedNovenaId = localStorage.getItem('selectedNovenaId');
+            if (savedSelectedNovenaId && novenasDefinitions.some(n => n.id === savedSelectedNovenaId)) {
+                selectedNovenaId = savedSelectedNovenaId;
+            } else if (novenasDefinitions.length > 0) {
+                selectedNovenaId = novenasDefinitions[0].id; // Sélectionne la première neuvaine par défaut
+            }
+        }
+
+        /**
+         * Met à jour l'affichage de la section des neuvaines.
+         */
+        function updateNovenasDisplay() {
+            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
+
+            if (!selectedNovena) {
+                novenaTitle.textContent = "Mes Neuvaines";
+                novenasContentPlaceholder.textContent = "Veuillez choisir une neuvaine.";
+                novenaStartDateInput.value = "";
+                novenaStartDateInput.disabled = true;
+                chooseDayBtn.disabled = true;
+                prevNovenaDayBtn.disabled = true;
+                nextNovenaDayBtn.disabled = true;
+                return;
+            }
+
+            // Met à jour la sélection dans le menu déroulant
+            novenaSelect.value = selectedNovenaId;
+
+            // Met à jour le champ de date de début
+            const storedStartDate = userNovenasState[selectedNovenaId];
+            novenaStartDateInput.value = storedStartDate || "";
+            novenaStartDateInput.disabled = false;
+
+            // Affiche le contenu de la neuvaine en fonction du jour affiché
+            if (displayedNovenaDay > 0 && displayedNovenaDay <= selectedNovena.days.length) {
+                const currentNovenaEntry = selectedNovena.days[displayedNovenaDay - 1]; // -1 car le tableau est 0-indexé
+                novenaTitle.textContent = `${selectedNovena.name} - Jour ${currentNovenaEntry.day}`;
+                novenasContentPlaceholder.textContent = `${currentNovenaEntry.title}: ${currentNovenaEntry.text}`;
+            } else {
+                novenaTitle.textContent = selectedNovena.name;
+                novenasContentPlaceholder.textContent = "Veuillez définir une date de début et cliquer sur 'Choisir le Jour' pour commencer la neuvaine.";
+            }
+
+            // Active/désactive les boutons de navigation des jours de neuvaine
+            prevNovenaDayBtn.disabled = displayedNovenaDay <= 1;
+            nextNovenaDayBtn.disabled = displayedNovenaDay >= selectedNovena.days.length;
+            chooseDayBtn.disabled = !storedStartDate; // Active le bouton si une date de début est définie
+        }
+
+        /**
+         * Remplit le menu déroulant des neuvaines avec les définitions disponibles.
+         */
+        function populateNovenaDropdown() {
+            novenaSelect.innerHTML = ''; // Efface les options existantes
+
+            if (novenasDefinitions.length === 0) {
+                const option = document.createElement('option');
+                option.value = "";
+                option.textContent = "Aucune neuvaine disponible";
+                novenaSelect.appendChild(option);
+                novenaSelect.disabled = true;
+                return;
+            }
+
+            novenaSelect.disabled = false;
+            novenasDefinitions.forEach(novena => {
+                const option = document.createElement('option');
+                option.value = novena.id;
+                option.textContent = novena.name;
+                novenaSelect.appendChild(option);
+            });
+
+            // Sélectionne la neuvaine chargée ou la première par défaut
+            if (selectedNovenaId) {
+                novenaSelect.value = selectedNovenaId;
+            } else if (novenasDefinitions.length > 0) {
+                selectedNovenaId = novenasDefinitions[0].id;
+                novenaSelect.value = selectedNovenaId;
+            }
+        }
+
+        // Écouteurs d'événements pour les boutons de navigation du plan biblique
+        prevDayBtn.addEventListener('click', () => {
+            if (currentDayIndex > 0) {
+                currentDayIndex--;
+                updateBiblePlanDisplay();
+            }
+        });
+
+        nextDayBtn.addEventListener('click', () => {
+            if (currentDayIndex < readingPlan.length - 1) {
+                currentDayIndex++;
+                updateBiblePlanDisplay();
+            }
+        });
+
+        // Écouteurs d'événements pour la section Neuvaines
+        novenaSelect.addEventListener('change', (event) => {
+            selectedNovenaId = event.target.value;
+            displayedNovenaDay = 0; // Réinitialise le jour affiché lors du changement de neuvaine
+            saveNovenasState(); // Sauvegarde la nouvelle neuvaine sélectionnée
+            updateNovenasDisplay();
+        });
+
+        novenaStartDateInput.addEventListener('change', (event) => {
+            if (selectedNovenaId) {
+                userNovenasState[selectedNovenaId] = event.target.value;
+                saveNovenasState();
+                showMessage("Date de début enregistrée.");
+                // Active le bouton "Choisir le Jour" si une date est sélectionnée
+                chooseDayBtn.disabled = !event.target.value;
+            }
+        });
+
+        chooseDayBtn.addEventListener('click', () => {
+            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
+            if (!selectedNovena) {
+                showMessage("Veuillez d'abord choisir une neuvaine.");
+                return;
+            }
+
+            const storedStartDate = userNovenasState[selectedNovenaId];
+            if (!storedStartDate) {
+                showMessage("Veuillez définir une date de début pour cette neuvaine.");
+                return;
+            }
+
+            const startDate = new Date(storedStartDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalise la date d'aujourd'hui au début du jour
+
+            const diffTime = today.getTime() - startDate.getTime(); // Différence en millisecondes
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // Différence en jours
+
+            // Si aujourd'hui est avant la date de début, ou si c'est le jour de début (diffDays = 0), on est au jour 1
+            if (diffDays < 0) { // If today is before the start date
+                displayedNovenaDay = 1;
+                showMessage(`La neuvaine commencera le ${startDate.toLocaleDateString()}.`);
+            } else {
+                displayedNovenaDay = diffDays + 1; // +1 car diffDays est 0 pour le premier jour, 1 pour le deuxième, etc.
+            }
+
+
+            // Limite le jour au nombre maximum de jours pour la neuvaine
+            if (displayedNovenaDay > selectedNovena.days.length) {
+                displayedNovenaDay = selectedNovena.days.length;
+                showMessage(`Félicitations ! Vous avez terminé la neuvaine à ${selectedNovena.name}.`);
+            } else if (displayedNovenaDay <= 0) { // Ensure it's at least day 1
+                displayedNovenaDay = 1;
+            } else {
+                showMessage(`Vous êtes au Jour ${displayedNovenaDay} de la neuvaine à ${selectedNovena.name}.`);
+            }
+
+            updateNovenasDisplay();
+        });
+
+        prevNovenaDayBtn.addEventListener('click', () => {
+            if (displayedNovenaDay > 1) {
+                displayedNovenaDay--;
+                updateNovenasDisplay();
+            }
+        });
+
+        nextNovenaDayBtn.addEventListener('click', () => {
+            const selectedNovena = novenasDefinitions.find(n => n.id === selectedNovenaId);
+            if (selectedNovena && displayedNovenaDay < selectedNovena.days.length) {
+                displayedNovenaDay++;
+                updateNovenasDisplay();
+            }
+        });
+
+
+        // --- Initialisation Principale de l'Application ---
+        window.onload = async function() {
+            // Le plan de lecture est intégré directement dans le code JavaScript.
+            const hardcodedPlan = `
+Nouveau Testament et Psaumes en 1 an - Jour 1 - Actes 1.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 2 - Actes 2.1-47
+Nouveau Testament et Psaumes en 1 an - Jour 3 - Actes 3.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 4 - Actes 4.1-37
+Nouveau Testament et Psaumes en 1 an - Jour 5 - Actes 5.1-42
+Nouveau Testament et Psaumes en 1 an - Jour 6 - Actes 6.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 7 - Actes 7.1-60
+Nouveau Testament et Psaumes en 1 an - Jour 8 - Actes 8.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 9 - Actes 9.1-43
+Nouveau Testament et Psaumes en 1 an - Jour 10 - Actes 10.1-48
+Nouveau Testament et Psaumes en 1 an - Jour 11 - Actes 11.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 12 - Actes 12.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 13 - Actes 13.1-52
+Nouveau Testament et Psaumes en 1 an - Jour 14 - Actes 14.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 15 - Actes 15.1-41
+Nouveau Testament et Psaumes en 1 an - Jour 16 - Actes 16.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 17 - Actes 17.1-34
+Nouveau Testament et Psaumes en 1 an - Jour 18 - Actes 18.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 19 - Actes 19.1-41
+Nouveau Testament et Psaumes en 1 an - Jour 20 - Actes 20.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 21 - Actes 21.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 22 - Actes 22.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 23 - Actes 23.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 24 - Actes 24.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 25 - Actes 25.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 26 - Actes 26.1-32
+Nouveau Testament et Psaumes en 1 an - Jour 27 - Actes 27.1-44
+Nouveau Testament et Psaumes en 1 an - Jour 28 - Actes 28.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 29 - Romains 1.1-32
+Nouveau Testament et Psaumes en 1 an - Jour 30 - Romains 2.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 31 - Romains 3.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 32 - Romains 4.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 33 - Romains 5.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 34 - Romains 6.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 35 - Romains 7.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 36 - Romains 8.1-39
+Nouveau Testament et Psaumes en 1 an - Jour 37 - Romains 9.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 38 - Romains 10.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 39 - Romains 11.1-36
+Nouveau Testament et Psaumes en 1 an - Jour 40 - Romains 12.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 41 - Romains 13.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 42 - Romains 14.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 43 - Romains 15.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 44 - Romains 16.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 45 - 1 Corinthiens 1.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 46 - 1 Corinthiens 2.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 47 - 1 Corinthiens 3.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 48 - 1 Corinthiens 4.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 49 - 1 Corinthiens 5.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 50 - 1 Corinthiens 6.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 51 - 1 Corinthiens 7.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 52 - 1 Corinthiens 8.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 53 - 1 Corinthiens 9.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 54 - 1 Corinthiens 10.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 55 - 1 Corinthiens 11.1-34
+Nouveau Testament et Psaumes en 1 an - Jour 56 - 1 Corinthiens 12.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 57 - 1 Corinthiens 13.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 58 - 1 Corinthiens 14.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 59 - 1 Corinthiens 15.1-58
+Nouveau Testament et Psaumes en 1 an - Jour 60 - 1 Corinthiens 16.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 61 - 2 Corinthiens 1.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 62 - 2 Corinthiens 2.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 63 - 2 Corinthiens 3.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 64 - 2 Corinthiens 4.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 65 - 2 Corinthiens 5.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 66 - 2 Corinthiens 6.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 67 - 2 Corinthiens 7.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 68 - 2 Corinthiens 8.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 69 - 2 Corinthiens 9.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 70 - 2 Corinthiens 10.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 71 - 2 Corinthiens 11.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 72 - 2 Corinthiens 12.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 73 - 2 Corinthiens 13.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 74 - Galates 1.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 75 - Galates 2.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 76 - Galates 3.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 77 - Galates 4.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 78 - Galates 5.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 79 - Galates 6.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 80 - Ephésiens 1.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 81 - Ephésiens 2.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 82 - Ephésiens 3.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 83 - Ephésiens 4.1-32
+Nouveau Testament et Psaumes en 1 an - Jour 84 - Ephésiens 5.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 85 - Ephésiens 6.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 86 - Philippiens 1.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 87 - Philippiens 2.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 88 - Philippiens 3.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 89 - Philippiens 4.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 90 - Colossiens 1.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 91 - Colossiens 2.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 92 - Colossiens 3.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 93 - Colossiens 4.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 94 - 1 Thessaloniciens 1.1-10
+Nouveau Testament et Psaumes en 1 an - Jour 95 - 1 Thessaloniciens 2.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 96 - 1 Thessaloniciens 3.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 97 - 1 Thessaloniciens 4.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 98 - 1 Thessaloniciens 5.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 99 - 2 Thessaloniciens 1.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 100 - 2 Thessaloniciens 2.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 101 - 2 Thessaloniciens 3.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 102 - 1 Timothée 1.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 103 - 1 Timothée 2.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 104 - 1 Timothée 3.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 105 - 1 Timothée 4.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 106 - 1 Timothée 5.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 107 - 1 Timothée 6.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 108 - 2 Timothée 1.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 109 - 2 Timothée 2.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 110 - 2 Timothée 3.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 111 - 2 Timothée 4.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 112 - Tite 1.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 113 - Tite 2.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 114 - Tite 3.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 115 - Philémon 1.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 116 - Hébreux 1.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 117 - Hébreux 2.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 118 - Hébreux 3.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 119 - Hébreux 4.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 120 - Hébreux 5.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 121 - Hébreux 6.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 122 - Hébreux 7.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 123 - Hébreux 8.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 124 - Hébreux 9.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 125 - Hébreux 10.1-39
+Nouveau Testament et Psaumes en 1 an - Jour 126 - Hébreux 11.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 127 - Hébreux 12.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 128 - Hébreux 13.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 129 - Jacques 1.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 130 - Jacques 2.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 131 - Jacques 3.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 132 - Jacques 4.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 133 - Jacques 5.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 134 - 1 Pierre 1.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 135 - 1 Pierre 2.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 136 - 1 Pierre 3.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 137 - 1 Pierre 4.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 138 - 1 Pierre 5.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 139 - 2 Pierre 1.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 140 - 2 Pierre 2.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 141 - 2 Pierre 3.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 142 - 1 Jean 1.1-10
+Nouveau Testament et Psaumes en 1 an - Jour 143 - 1 Jean 2.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 144 - 1 Jean 3.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 145 - 1 Jean 4.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 146 - 1 Jean 5.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 147 - 2 Jean 1.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 148 - 3 Jean 1.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 149 - Jude 1.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 150 - Apocalypse 1.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 151 - Apocalypse 2.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 152 - Apocalypse 3.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 153 - Apocalypse 4.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 154 - Apocalypse 5.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 155 - Apocalypse 6.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 156 - Apocalypse 7.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 157 - Apocalypse 8.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 158 - Apocalypse 9.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 159 - Apocalypse 10.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 160 - Apocalypse 11.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 161 - Apocalypse 12.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 162 - Apocalypse 13.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 163 - Apocalypse 14.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 164 - Apocalypse 15.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 165 - Apocalypse 16.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 166 - Apocalypse 17.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 167 - Apocalypse 18.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 168 - Apocalypse 19.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 169 - Apocalypse 20.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 170 - Apocalypse 21.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 171 - Apocalypse 22.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 172 - Matthieu 1.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 173 - Matthieu 2.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 174 - Matthieu 3.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 175 - Matthieu 4.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 176 - Matthieu 5.1-48
+Nouveau Testament et Psaumes en 1 an - Jour 177 - Matthieu 6.1-34
+Nouveau Testament et Psaumes en 1 an - Jour 178 - Matthieu 7.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 179 - Matthieu 8.1-34
+Nouveau Testament et Psaumes en 1 an - Jour 180 - Matthieu 9.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 181 - Matthieu 10.1-42
+Nouveau Testament et Psaumes en 1 an - Jour 182 - Matthieu 11.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 183 - Matthieu 12.1-50
+Nouveau Testament et Psaumes en 1 an - Jour 184 - Matthieu 13.1-58
+Nouveau Testament et Psaumes en 1 an - Jour 185 - Matthieu 14.1-36
+Nouveau Testament et Psaumes en 1 an - Jour 186 - Matthieu 15.1-39
+Nouveau Testament et Psaumes en 1 an - Jour 187 - Matthieu 16.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 188 - Matthieu 17.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 189 - Matthieu 18.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 190 - Matthieu 19.1-30
+Nouveau Testament et Psaumes en 1 an - Jour 191 - Matthieu 20.1-34
+Nouveau Testament et Psaumes en 1 an - Jour 192 - Matthieu 21.1-46
+Nouveau Testament et Psaumes en 1 an - Jour 193 - Matthieu 22.1-46
+Nouveau Testament et Psaumes en 1 an - Jour 194 - Matthieu 23.1-39
+Nouveau Testament et Psaumes en 1 an - Jour 195 - Matthieu 24.1-51
+Nouveau Testament et Psaumes en 1 an - Jour 196 - Matthieu 25.1-46
+Nouveau Testament et Psaumes en 1 an - Jour 197 - Matthieu 26.1-75
+Nouveau Testament et Psaumes en 1 an - Jour 198 - Matthieu 27.1-66
+Nouveau Testament et Psaumes en 1 an - Jour 199 - Matthieu 28.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 200 - Marc 1.1-45
+Nouveau Testament et Psaumes en 1 an - Jour 201 - Marc 2.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 202 - Marc 3.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 203 - Marc 4.1-41
+Nouveau Testament et Psaumes en 1 an - Jour 204 - Marc 5.1-43
+Nouveau Testament et Psaumes en 1 an - Jour 205 - Marc 6.1-56
+Nouveau Testament et Psaumes en 1 an - Jour 206 - Marc 7.1-37
+Nouveau Testament et Psaumes en 1 an - Jour 207 - Marc 8.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 208 - Marc 9.1-50
+Nouveau Testament et Psaumes en 1 an - Jour 209 - Marc 10.1-52
+Nouveau Testament et Psaumes en 1 an - Jour 210 - Marc 11.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 211 - Marc 12.1-44
+Nouveau Testament et Psaumes en 1 an - Jour 212 - Marc 13.1-37
+Nouveau Testament et Psaumes en 1 an - Jour 213 - Marc 14.1-72
+Nouveau Testament et Psaumes en 1 an - Jour 214 - Marc 15.1-47
+Nouveau Testament et Psaumes en 1 an - Jour 215 - Marc 16.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 216 - Psaumes 1.1-6,Psaumes 2.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 217 - Psaumes 3.1-9,Psaumes 4.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 218 - Sophonie 1.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 219 - Psaumes 7.1-18,Psaumes 8.1-9
+Nouveau Testament et Psaumes en 1 an - Jour 220 - Psaumes 9.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 221 - Psaumes 10.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 222 - Psaumes 11.1-7,Psaumes 12.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 223 - Psaumes 13.1-6,Psaumes 14.1-7
+Nouveau Testament et Psaumes en 1 an - Jour 224 - Psaumes 15.1-5,Psaumes 16.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 225 - Psaumes 17.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 226 - Psaumes 18.1-50
+Nouveau Testament et Psaumes en 1 an - Jour 227 - Psaumes 19.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 228 - Psaumes 20.1-10,Psaumes 21.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 229 - Psaumes 22.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 230 - Psaumes 23.1-6,Psaumes 24.1-10
+Nouveau Testament et Psaumes en 1 an - Jour 231 - Psaumes 25.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 232 - Psaumes 26.1-12,Psaumes 27.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 233 - Psaumes 28.1-9,Psaumes 29.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 234 - Psaumes 30.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 235 - Psaumes 31.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 236 - Psaumes 32.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 237 - Psaumes 33.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 238 - Psaumes 34.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 239 - Psaumes 35.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 240 - Psaumes 36.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 241 - Psaumes 37.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 242 - Psaumes 38.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 243 - Psaumes 39.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 244 - Psaumes 40.1-18,Psaumes 41.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 245 - Psaumes 42.1-12,Psaumes 43.1-5
+Nouveau Testament et Psaumes en 1 an - Jour 246 - Psaumes 44.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 247 - Psaumes 45.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 248 - Psaumes 46.1-12,Psaumes 47.1-9
+Nouveau Testament et Psaumes en 1 an - Jour 249 - Psaumes 48.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 250 - Psaumes 49.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 251 - Psaumes 50.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 252 - Psaumes 51.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 253 - Psaumes 52.1-11,Psaumes 53.1-7,Psaumes 54.1-7
+Nouveau Testament et Psaumes en 1 an - Jour 254 - Psaumes 55.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 255 - Psaumes 56.1-14,Psaumes 57.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 256 - Psaumes 58.1-12,Psaumes 59.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 257 - Psaumes 60.1-14,Psaumes 61.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 258 - Psaumes 62.1-13,Psaumes 63.1-11
+Nouveau Testament et Psaumes en 1 an - Jour 259 - Psaumes 64.1-11,Psaumes 65.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 260 - Psaumes 66.1-20,Psaumes 67.1-7
+Nouveau Testament et Psaumes en 1 an - Jour 261 - Psaumes 68.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 262 - Psaumes 69.1-36
+Nouveau Testament et Psaumes en 1 an - Jour 263 - Psaumes 70.1-6,Psaumes 71.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 264 - Psaumes 72.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 265 - Psaumes 73.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 266 - Psaumes 74.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 267 - Psaumes 75.1-11,Psaumes 76.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 268 - Psaumes 77.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 269 - Psaumes 78.1-37
+Nouveau Testament et Psaumes en 1 an - Jour 270 - Psaumes 78.38-72
+Nouveau Testament et Psaumes en 1 an - Jour 271 - Psaumes 79.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 272 - Psaumes 80.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 273 - Psaumes 81.1-17,Psaumes 82.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 274 - Psaumes 83.1-19,Psaumes 84.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 275 - Psaumes 85.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 276 - Psaumes 86.1-17,Psaumes 87.1-7
+Nouveau Testament et Psaumes en 1 an - Jour 277 - Psaumes 88.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 278 - Psaumes 89.1-52
+Nouveau Testament et Psaumes en 1 an - Jour 279 - Psaumes 90.1-17
+Nouveau Testament et Psaumes en 1 an - Jour 280 - Psaumes 91.1-16
+Nouveau Testament et Psaumes en 1 an - Jour 281 - Psaumes 92.1-16,Psaumes 93.1-5
+Nouveau Testament et Psaumes en 1 an - Jour 282 - Psaumes 94.1-23
+Nouveau Testament et Psaumes en 1 an - Jour 283 - Psaumes 95.1-11,Psaumes 96.1-13
+Nouveau Testament et Psaumes en 1 an - Jour 284 - Psaumes 97.1-12,Psaumes 98.1-9
+Nouveau Testament et Psaumes en 1 an - Jour 285 - Psaumes 99.1-9,Psaumes 100.1-5,Psaumes 101.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 286 - Psaumes 102.1-28
+Nouveau Testament et Psaumes en 1 an - Jour 287 - Psaumes 103.1-22
+Nouveau Testament et Psaumes en 1 an - Jour 288 - Psaumes 104.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 289 - Psaumes 105.1-45
+Nouveau Testament et Psaumes en 1 an - Jour 290 - Psaumes 106.1-48
+Nouveau Testament et Psaumes en 1 an - Jour 291 - Psaumes 107.1-43
+Nouveau Testament et Psaumes en 1 an - Jour 292 - Psaumes 108.1-14,Psaumes 109.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 293 - Psaumes 110.1-7,Psaumes 111.1-10
+Nouveau Testament et Psaumes en 1 an - Jour 294 - Psaumes 112.1-10,Psaumes 113.1-9
+Nouveau Testament et Psaumes en 1 an - Jour 295 - Psaumes 114.1-8,Psaumes 115.1-18
+Nouveau Testament et Psaumes en 1 an - Jour 296 - Psaumes 116.1-19
+Nouveau Testament et Psaumes en 1 an - Jour 297 - Psaumes 117.1-2,Psaumes 118.1-29
+Nouveau Testament et Psaumes en 1 an - Jour 298 - Psaumes 119.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 299 - Psaumes 119.25-48
+Nouveau Testament et Psaumes en 1 an - Jour 300 - Psaumes 119.49-72
+Nouveau Testament et Psaumes en 1 an - Jour 301 - Psaumes 119.73-96
+Nouveau Testament et Psaumes en 1 an - Jour 302 - Psaumes 119.97-120
+Nouveau Testament et Psaumes en 1 an - Jour 303 - Psaumes 119.121-144
+Nouveau Testament et Psaumes en 1 an - Jour 304 - Psaumes 119.145-176
+Nouveau Testament et Psaumes en 1 an - Jour 305 - Psaumes 120.1-7,Psaumes 121.1-8,Psaumes 122.1-9
+Nouveau Testament et Psaumes en 1 an - Jour 306 - Psaumes 123.1-4,Psaumes 124.1-8,Psaumes 125.1-5
+Nouveau Testament et Psaumes en 1 an - Jour 307 - Psaumes 126.1-6,Psaumes 127.1-5,Psaumes 128.1-6
+Nouveau Testament et Psaumes en 1 an - Jour 308 - Psaumes 129.1-8,Psaumes 130.1-8,Psaumes 131.1-3
+Nouveau Testament et Psaumes en 1 an - Jour 309 - Psaumes 132.1-18,Psaumes 133.1-4,Psaumes 134.1-3
+Nouveau Testament et Psaumes en 1 an - Jour 310 - Psaumes 135.1-21,Psaumes 136.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 311 - Psaumes 137.1-9,Psaumes 138.1-8
+Nouveau Testament et Psaumes en 1 an - Jour 312 - Psaumes 139.1-24
+Nouveau Testament et Psaumes en 1 an - Jour 313 - Psaumes 140.1-14,Psaumes 141.1-10
+Nouveau Testament et Psaumes en 1 an - Jour 314 - Psaumes 142.1-8,Psaumes 143.1-12
+Nouveau Testament et Psaumes en 1 an - Jour 315 - Psaumes 144.1-15
+Nouveau Testament et Psaumes en 1 an - Jour 316 - Psaumes 145.1-21
+Nouveau Testament et Psaumes en 1 an - Jour 317 - Psaumes 146.1-10,Psaumes 147.1-20
+Nouveau Testament et Psaumes en 1 an - Jour 318 - Psaumes 148.1-14
+Nouveau Testament et Psaumes en 1 an - Jour 319 - Psaumes 149.1-9,Psaumes 150.1-6
+Nouveau Testament et Psaumes en 1 an - Jour 320 - Luc 1.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 321 - Luc 1.39-80
+Nouveau Testament et Psaumes en 1 an - Jour 322 - Luc 2.1-52
+Nouveau Testament et Psaumes en 1 an - Jour 323 - Luc 3.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 324 - Luc 4.1-44
+Nouveau Testament et Psaumes en 1 an - Jour 325 - Luc 5.1-39
+Nouveau Testament et Psaumes en 1 an - Jour 326 - Luc 6.1-49
+Nouveau Testament et Psaumes en 1 an - Jour 327 - Luc 7.1-50
+Nouveau Testament et Psaumes en 1 an - Jour 328 - Luc 8.1-56
+Nouveau Testament et Psaumes en 1 an - Jour 329 - Luc 9.1-62
+Nouveau Testament et Psaumes en 1 an - Jour 330 - Luc 10.1-42
+Nouveau Testament et Psaumes en 1 an - Jour 331 - Luc 11.1-54
+Nouveau Testament et Psaumes en 1 an - Jour 332 - Luc 12.1-59
+Nouveau Testament et Psaumes en 1 an - Jour 333 - Luc 13.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 334 - Luc 14.1-35
+Nouveau Testament et Psaumes en 1 an - Jour 335 - Luc 15.1-32
+Nouveau Testament et Psaumes en 1 an - Jour 336 - Luc 16.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 337 - Luc 17.1-37
+Nouveau Testament et Psaumes en 1 an - Jour 338 - Luc 18.1-43
+Nouveau Testament et Psaumes en 1 an - Jour 339 - Luc 19.1-48
+Nouveau Testament et Psaumes en 1 an - Jour 340 - Luc 20.1-47
+Nouveau Testament et Psaumes en 1 an - Jour 341 - Luc 21.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 342 - Luc 22.1-71
+Nouveau Testament et Psaumes en 1 an - Jour 343 - Luc 23.1-56
+Nouveau Testament et Psaumes en 1 an - Jour 344 - Luc 24.1-53
+Nouveau Testament et Psaumes en 1 an - Jour 345 - Jean 1.1-51
+Nouveau Testament et Psaumes en 1 an - Jour 346 - Jean 2.1-25
+Nouveau Testament et Psaumes en 1 an - Jour 347 - Jean 3.1-36
+Nouveau Testament et Psaumes en 1 an - Jour 348 - Jean 4.1-54
+Nouveau Testament et Psaumes en 1 an - Jour 349 - Jean 5.1-47
+Nouveau Testament et Psaumes en 1 an - Jour 350 - Jean 6.1-71
+Nouveau Testament et Psaumes en 1 an - Jour 351 - Jean 7.1-53
+Nouveau Testament et Psaumes en 1 an - Jour 352 - Jean 8.1-59
+Nouveau Testament et Psaumes en 1 an - Jour 353 - Jean 9.1-41
+Nouveau Testament et Psaumes en 1 an - Jour 354 - Jean 10.1-42
+Nouveau Testament et Psaumes en 1 an - Jour 355 - Jean 11.1-57
+Nouveau Testament et Psaumes en 1 an - Jour 356 - Jean 12.1-50
+Nouveau Testament et Psaumes en 1 an - Jour 357 - Jean 13.1-38
+Nouveau Testament et Psaumes en 1 an - Jour 358 - Jean 14.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 359 - Jean 15.1-27
+Nouveau Testament et Psaumes en 1 an - Jour 360 - Jean 16.1-33
+Nouveau Testament et Psaumes en 1 an - Jour 361 - Jean 17.1-26
+Nouveau Testament et Psaumes en 1 an - Jour 362 - Jean 18.1-40
+Nouveau Testament et Psaumes en 1 an - Jour 363 - Jean 19.1-42
+Nouveau Testament et Psaumes en 1 an - Jour 364 - Jean 20.1-31
+Nouveau Testament et Psaumes en 1 an - Jour 365 - Jean 21.1-25
+Jour 366 - Félicitations
+            `;
+
+            try {
+                readingPlan = parseReadingPlan(hardcodedPlan);
+
+                if (readingPlan.length > 0) {
+                    currentDayIndex = getDayOfYear() - 1;
+                    if (currentDayIndex < 0 || currentDayIndex >= readingPlan.length) {
+                        currentDayIndex = 0;
+                    }
+                    updateBiblePlanDisplay(); // Mettre à jour l'affichage initial du plan biblique
+                } else {
+                    currentDayText.textContent = "Aucun plan de lecture disponible.";
+                    currentReadingText.textContent = "";
+                    prevDayBtn.disabled = true;
+                    nextDayBtn.disabled = true;
+                    openReadingBtn.disabled = true;
+                }
+            } catch (error) {
+                console.error("Erreur lors de l'initialisation du plan de lecture:", error);
+                currentDayText.textContent = "Erreur inattendue.";
+                currentReadingText.textContent = "";
+                prevDayBtn.disabled = true;
+                nextDayBtn.disabled = true;
+                openReadingBtn.disabled = true;
+            }
+
+            loadNovenasState(); // Charge l'état sauvegardé des neuvaines
+            populateNovenaDropdown(); // Remplit le menu déroulant des neuvaines
+            updateNovenasDisplay(); // Met à jour l'affichage de la section neuvaines
+        };
+    </script>
 </body>
 </html>
-
